@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mafia.SeatsGenerator.Views.GamesPageView"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
+             xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
+             xmlns:models="clr-namespace:Mafia.SeatsGenerator.Models;assembly=Mafia.SeatsGenerator"
+             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
+             xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
+             xmlns:behaviors="clr-namespace:Mafia.SeatsGenerator.Utils.Behaviors;assembly=Mafia.SeatsGenerator"
+             mc:Ignorable="d"
+             x:Name="ContentPage">
+    <ContentPage.Resources>
+        <converters:FirstKilledToBoolConverter x:Key="FirstKilledToBoolConverter"/>
+    </ContentPage.Resources>
+    <d:ContentPage.BindingContext>
+        <viewModels:GamesPageViewModel/>
+    </d:ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <ScrollView>
+                <FlexLayout BindableLayout.ItemsSource="{Binding Games}" Wrap="Wrap" AlignItems="Start" AlignContent="Start">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Frame FlexLayout.Grow="1" BackgroundColor="{Binding GameColor}" HasShadow="True">
+                                <d:Frame.BindingContext>
+                                    <models:Game/>
+                                </d:Frame.BindingContext>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                                        <Label FontAttributes="Bold" TextColor="Black" Text="{Binding Number, StringFormat='{0}.'}" LineBreakMode="NoWrap" FontSize="16"/>
+                                        <Label FontAttributes="Bold" TextColor="Black" Text="{Binding Host.Player.Name}" LineBreakMode="NoWrap" FontSize="16"/>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                                        <Label TextColor="Black" Text="{Binding Members[0].Player.Name, StringFormat='1. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[0]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="14" VerticalOptions="Center">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[0]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.Column="0">
+                                        <Label TextColor="Black" Text="{Binding Members[1].Player.Name, StringFormat='2. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[1]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[1]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="0">
+                                        <Label TextColor="Black" Text="{Binding Members[2].Player.Name, StringFormat='3. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[2]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[2]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="4" Grid.Column="0">
+                                        <Label TextColor="Black" Text="{Binding Members[3].Player.Name, StringFormat='4. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[3]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[3]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="5" Grid.Column="0">
+                                        <Label TextColor="Black" Text="{Binding Members[4].Player.Name, StringFormat='5. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[4]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[4]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                                        <Label TextColor="Black" Text="{Binding Members[5].Player.Name, StringFormat='6. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[5]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[5]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
+                                        <Label TextColor="Black" Text="{Binding Members[6].Player.Name, StringFormat='7. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[6]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[6]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
+                                        <Label TextColor="Black" Text="{Binding Members[7].Player.Name, StringFormat='8. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[7]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[7]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
+                                        <Label TextColor="Black" Text="{Binding Members[8].Player.Name, StringFormat='9. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[8]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[8]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="5" Grid.Column="1">
+                                        <Label TextColor="Black" Text="{Binding Members[9].Player.Name, StringFormat='10. {0}'}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.FirstKilledCommand}" CommandParameter="{Binding Members[9]}"/> 
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="12">
+                                            <iconize:IconLabel.IsVisible>
+                                                <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
+                                                    <MultiBinding.Bindings>
+                                                        <Binding Path="Members[9]"/>
+                                                        <Binding Path="FirstKilled"/>
+                                                    </MultiBinding.Bindings>
+                                                </MultiBinding>
+                                            </iconize:IconLabel.IsVisible>
+                                        </iconize:IconLabel>
+                                    </StackLayout>
+                                    <iconize:IconButton Text="far-trash-alt" Padding="0"
+                                                        Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemoveGameCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        FontFamily="FA-R" FontSize="20" TextColor="Red" BackgroundColor="Transparent"
+                                                        HorizontalOptions="Center" WidthRequest="40" VerticalOptions="Start"
+                                                        Grid.Row="6" Grid.Column="1"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </ScrollView>
+            <Button Text="Сгенерировать следующую игру" 
+                    Command="{Binding GenerateNewGameCommand}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

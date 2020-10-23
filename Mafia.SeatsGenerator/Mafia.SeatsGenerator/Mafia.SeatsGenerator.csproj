@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DebugType>pdbonly</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+        <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
+        <PackageReference Include="Xam.Plugin.Iconize.FontAwesome" Version="3.5.0.129" />
+        <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="IconFonts\iconize-fontawesome-regular.ttf" />
+      <None Remove="IconFonts\iconize-fontawesome-solid.ttf" />
+      <EmbeddedResource Include="IconFonts\iconize-fontawesome-solid.ttf" />
+    </ItemGroup>
+</Project>

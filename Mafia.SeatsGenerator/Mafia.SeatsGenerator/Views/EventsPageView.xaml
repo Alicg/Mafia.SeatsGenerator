@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
+             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
+             x:Class="Mafia.SeatsGenerator.Views.EventsPageView"
+             x:Name="ContentPage"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <d:ContentPage.BindingContext>
+        <viewModels:EventsPageViewModel/>
+    </d:ContentPage.BindingContext>
+    <ScrollView>
+        <StackLayout Orientation="Vertical">
+            <ListView ItemsSource="{Binding EventsArchive}" SelectionMode="None" RowHeight="80" HorizontalOptions="FillAndExpand">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid HorizontalOptions="FillAndExpand">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Name}" FontSize="20"
+                                       Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                                <iconize:IconButton Text="far-play-circle" 
+                                                    Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.LoadEventCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="FA-R" FontSize="19" TextColor="Blue" BackgroundColor="Transparent"
+                                                    HorizontalOptions="Start" VerticalOptions="Center" 
+                                                    Grid.Row="0" Grid.Column="1"/>
+                                <Label Text="{Binding Visitors.Count, StringFormat='&#xf007;:{0}'}" FontFamily="FA-R" TextColor="Blue" FontSize="20"
+                                       Grid.Row="0" Grid.Column="2" VerticalOptions="Center"/>
+                                <iconize:IconButton Text="far-trash-alt" 
+                                                    Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemoveEventCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    FontFamily="FA-R" FontSize="19" TextColor="Red" BackgroundColor="Transparent"
+                                                    HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" 
+                                                    Grid.Row="0" Grid.Column="3"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Entry x:Name="EventNameEntry" HorizontalOptions="FillAndExpand" Placeholder="Название встречи"/>
+            <Button Text="Сохранить встречу" Command="{Binding SaveNewEventCommand}" CommandParameter="{Binding Source={x:Reference Name=EventNameEntry}, Path=Text}"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

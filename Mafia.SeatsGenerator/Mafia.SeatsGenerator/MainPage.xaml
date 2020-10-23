@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
+                xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
+                xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
+                x:Class="Mafia.SeatsGenerator.MainPage"
+                x:Name="ContentPage">
+    <TabbedPage.BindingContext>
+        <viewModels:MainViewModel/>
+    </TabbedPage.BindingContext>
+    <views:PlayersSetupPageView Title="Игроки" BindingContext="{Binding PlayersSetupPageViewModel}"/>
+    <views:GamesPageView Title="Рассадка" BindingContext="{Binding StaticGamesPageViewModel}"/>
+    <views:EventsPageView Title="Встречи" BindingContext="{Binding EventsPageViewModel}"/>
+</TabbedPage>
