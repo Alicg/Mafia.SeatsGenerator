@@ -13,7 +13,7 @@ namespace Mafia.SeatsGenerator.ViewModels
         public MainViewModel()
         {
             this.PlayersSetupPageViewModel = new PlayersSetupPageViewModel(this.registeredPlayers);
-            this.StaticGamesPageViewModel = new GamesPageViewModel(this.registeredPlayers, this.registeredGames);
+            this.StaticGamesPageViewModel = new GamesPageViewModel(this.registeredPlayers, this.registeredGames, new PopupService());
             this.EventsPageViewModel = new EventsPageViewModel(new EventsService(), this.registeredPlayers, this.registeredGames);
         }
 

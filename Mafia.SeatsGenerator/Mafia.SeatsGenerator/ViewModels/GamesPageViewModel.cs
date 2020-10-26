@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Mafia.SeatsGenerator.Models;
+using Mafia.SeatsGenerator.Services;
 using Xamarin.Forms;
 
 namespace Mafia.SeatsGenerator.ViewModels
@@ -12,10 +13,12 @@ namespace Mafia.SeatsGenerator.ViewModels
     {
         private Random randomGenerator = new Random();
         private readonly ObservableCollection<Player> players;
+        private readonly PopupService popupService;
 
-        public GamesPageViewModel(ObservableCollection<Player> players, ObservableCollection<Game> games)
+        public GamesPageViewModel(ObservableCollection<Player> players, ObservableCollection<Game> games, PopupService popupService)
         {
             this.players = players;
+            this.popupService = popupService;
             this.Games = games;
         }
         
@@ -92,6 +95,11 @@ namespace Mafia.SeatsGenerator.ViewModels
         private Player GetNewHost()
         {
             var sortedPossibleHosts = this.players.Where(v => v.CanBeHost).OrderBy(v => v.PriorityPoints).ToList();
+            if (sortedPossibleHosts.Count == 0)
+            {
+                this.popupService.ShowAlert(@"Установите признак ""Ведущий"" хотя бы для одного игрока во вкладке ""Игроки""", "Нет ведущих.");
+                throw new ApplicationException("Нет ведущих.");
+            }
             var hostsWithMaxPoints = sortedPossibleHosts.Where(v => Math.Abs(v.PriorityPoints - sortedPossibleHosts.Max(h => h.PriorityPoints)) < 0.01).ToList();
             return hostsWithMaxPoints[this.randomGenerator.Next(0, hostsWithMaxPoints.Count - 1)];
         }
