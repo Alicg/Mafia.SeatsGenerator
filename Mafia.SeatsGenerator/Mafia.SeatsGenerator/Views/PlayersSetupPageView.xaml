@@ -28,15 +28,20 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Text="{Binding Number}" FontSize="20"
                                        Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center"/>
-                                <Entry Placeholder="Введите ник игрока" 
+                                <Entry Placeholder="Введите ник игрока"
                                        Text="{Binding Name, Mode=TwoWay}" HorizontalOptions="FillAndExpand" 
-                                       Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="5"/>
+                                       Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"/>
+                                <iconize:IconButton Text="far-caret-square-down" 
+                                                    FontFamily="FA-R" FontSize="19" TextColor="Green" BackgroundColor="Transparent"
+                                                    HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" 
+                                                    Grid.Row="0" Grid.Column="5"
+                                                    Clicked="Button_OnClicked"/>
                                 <Label Text="Ведущий:" VerticalOptions="Center"
                                        Grid.Row="1" Grid.Column="1"/>
                                 <CheckBox IsChecked="{Binding CanBeHost, Mode=TwoWay}" 

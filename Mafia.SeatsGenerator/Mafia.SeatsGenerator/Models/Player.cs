@@ -1,7 +1,4 @@
-﻿using System;
-using System.Transactions;
-using SQLite;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Mafia.SeatsGenerator.Models
 {

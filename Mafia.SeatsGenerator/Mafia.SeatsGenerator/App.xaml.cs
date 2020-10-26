@@ -12,6 +12,8 @@ namespace Mafia.SeatsGenerator
         public App()
         {
             InitializeComponent();
+            
+            XF.Material.Forms.Material.Init(this);
 
             Plugin.Iconize.Iconize.With(new Plugin.Iconize.Fonts.FontAwesomeBrandsModule())
                 .With(new Plugin.Iconize.Fonts.FontAwesomeRegularModule())
