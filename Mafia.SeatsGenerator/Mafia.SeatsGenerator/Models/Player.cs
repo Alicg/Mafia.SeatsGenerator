@@ -7,6 +7,7 @@ namespace Mafia.SeatsGenerator.Models
         private string _name;
         private int _number;
         private double priorityPoints;
+        private bool isBusy;
 
         public string Name
         {
@@ -29,6 +30,16 @@ namespace Mafia.SeatsGenerator.Models
             {
                 this._number = value;
                 this.OnPropertyChanged(nameof(this.Number));
+            }
+        }
+
+        public bool IsBusy
+        {
+            get => this.isBusy;
+            set
+            {
+                this.isBusy = value;
+                this.OnPropertyChanged(nameof(this.IsBusy));
             }
         }
 

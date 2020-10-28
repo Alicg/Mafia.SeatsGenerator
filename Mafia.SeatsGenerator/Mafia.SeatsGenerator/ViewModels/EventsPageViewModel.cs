@@ -10,13 +10,13 @@ namespace Mafia.SeatsGenerator.ViewModels
     {
         private readonly EventsService eventsService;
         private readonly ObservableCollection<Player> players;
-        private readonly ObservableCollection<Game> games;
+        private readonly RoomsPageViewModel roomsPageViewModel;
 
-        public EventsPageViewModel(EventsService eventsService, ObservableCollection<Player> players, ObservableCollection<Game> games)
+        public EventsPageViewModel(EventsService eventsService, ObservableCollection<Player> players, RoomsPageViewModel roomsPageViewModel)
         {
             this.eventsService = eventsService;
             this.players = players;
-            this.games = games;
+            this.roomsPageViewModel = roomsPageViewModel;
 
             var archiveEvents = this.eventsService.SelectAllEvents();
             foreach (var archiveEvent in archiveEvents)
@@ -50,7 +50,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void LoadEvent(Event eventToLoad)
         {
-            this.games.Clear();
+            this.roomsPageViewModel.Clear();
             this.players.Clear();
             foreach (var visitor in eventToLoad.Visitors)
             {

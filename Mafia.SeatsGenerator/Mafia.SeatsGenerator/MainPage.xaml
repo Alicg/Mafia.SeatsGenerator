@@ -10,6 +10,6 @@
         <viewModels:MainViewModel/>
     </TabbedPage.BindingContext>
     <views:PlayersSetupPageView Title="Игроки" BindingContext="{Binding PlayersSetupPageViewModel}"/>
-    <views:GamesPageView Title="Рассадка" BindingContext="{Binding StaticGamesPageViewModel}"/>
+    <views:RoomsPageView Title="Рассадка" BindingContext="{Binding RoomsPageViewModel}"/>
     <views:EventsPageView Title="Встречи" BindingContext="{Binding EventsPageViewModel}"/>
 </TabbedPage>

@@ -12,16 +12,21 @@
              xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
              xmlns:behaviors="clr-namespace:Mafia.SeatsGenerator.Utils.Behaviors;assembly=Mafia.SeatsGenerator"
              mc:Ignorable="d"
-             x:Name="ContentPage">
+             x:Name="ContentPage"
+             Title="{Binding RoomName}">
     <ContentPage.Resources>
         <converters:FirstKilledToBoolConverter x:Key="FirstKilledToBoolConverter"/>
     </ContentPage.Resources>
     <d:ContentPage.BindingContext>
-        <viewModels:GamesPageViewModel/>
+        <viewModels:RoomPageViewModel/>
     </d:ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical">
-            <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ScrollView Grid.Row="0">
                 <FlexLayout BindableLayout.ItemsSource="{Binding Games}" Wrap="Wrap" AlignItems="Start" AlignContent="Start">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
@@ -229,8 +234,8 @@
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>
             </ScrollView>
-            <Button Text="Сгенерировать следующую игру" 
-                    Command="{Binding GenerateNewGameCommand}"/>
-        </StackLayout>
+            <Button Text="Сгенерировать следующую игру" Command="{Binding GenerateNewGameCommand}"
+                    Grid.Row="1"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

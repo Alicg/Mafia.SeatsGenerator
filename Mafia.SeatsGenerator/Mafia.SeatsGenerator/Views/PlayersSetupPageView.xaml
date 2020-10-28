@@ -51,7 +51,7 @@
                                        Grid.Row="1" Grid.Column="3"/>
                                 <CheckBox IsChecked="{Binding IsVip, Mode=TwoWay}" VerticalOptions="Center" 
                                           Grid.Row="1" Grid.Column="4"/>
-                                <Label Text="{Binding PriorityPoints, StringFormat='Приоритет: {0}'}" VerticalOptions="Center"
+                                <Label Text="{Binding PriorityPoints, StringFormat='Игр: {0}'}" VerticalOptions="Center"
                                        Grid.Row="1" Grid.Column="5"/>
                                 <iconize:IconButton Text="far-trash-alt" 
                                                     Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemovePlayerCommand}"

@@ -9,25 +9,27 @@ using Xamarin.Forms;
 
 namespace Mafia.SeatsGenerator.ViewModels
 {
-    public class GamesPageViewModel : BindableObject
+    public class RoomPageViewModel : BindableObject
     {
         private Random randomGenerator = new Random();
         private readonly ObservableCollection<Player> players;
         private readonly PopupService popupService;
 
-        public GamesPageViewModel(ObservableCollection<Player> players, ObservableCollection<Game> games, PopupService popupService)
+        public RoomPageViewModel() { }
+
+        public RoomPageViewModel(Room room, ObservableCollection<Player> players, PopupService popupService)
         {
             this.players = players;
             this.popupService = popupService;
-            this.Games = games;
+            this.Room = room;
         }
         
-        public ObservableCollection<Game> Games { get; }
+        public Room Room { get; }
 
         public ICommand GenerateNewGameCommand => new Command(this.GenerateNewGame);
         public ICommand RemoveGameCommand => new Command<Game>(this.RemoveGame);
         public ICommand FirstKilledCommand => new Command<PlayerInGame>(this.SetFirstKilled);
-
+        
         private void SetFirstKilled(PlayerInGame p)
         {
             if (p.Game.FirstKilled != null)
@@ -44,13 +46,13 @@ namespace Mafia.SeatsGenerator.ViewModels
             {
                 var newGame = new Game();
                 newGame.Host = new PlayerInGame(this.GetNewHost(), newGame);
-
+            
                 foreach (var player in this.GetNewSetOfPlayers(newGame.Host.Player))
                 {
                     newGame.Members.Add(new PlayerInGame(player, newGame));
                 }
-                this.Games.Add(newGame);
-
+                this.Room.Games.Add(newGame);
+            
                 foreach (var player in newGame.Members)
                 {
                     player.Player.PriorityPoints++;
@@ -67,7 +69,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void RemoveGame(Game game)
         {
-            this.Games.Remove(game);
+            this.Room.Games.Remove(game);
             
             foreach (var player in game.Members)
             {
@@ -86,9 +88,9 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void RecalculateNumbers()
         {
-            for (var index = 0; index < this.Games.Count; index++)
+            for (var index = 0; index < this.Room.Games.Count; index++)
             {
-                var game = this.Games[index];
+                var game = this.Room.Games[index];
                 game.Number = index + 1;
             }
         }
