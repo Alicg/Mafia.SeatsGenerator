@@ -71,7 +71,14 @@ namespace Mafia.SeatsGenerator.ViewModels
             
             foreach (var player in game.Members)
             {
-                player.Player.PriorityPoints--;
+                if (game.FirstKilled == player)
+                {
+                    player.Player.PriorityPoints -= 0.5;
+                }
+                else
+                {
+                    player.Player.PriorityPoints -= 1;
+                }
             }
             
             this.RecalculateNumbers();
@@ -100,7 +107,9 @@ namespace Mafia.SeatsGenerator.ViewModels
                 this.popupService.ShowAlert(@"Установите признак ""Ведущий"" хотя бы для одного игрока во вкладке ""Игроки""", "Нет ведущих.");
                 throw new ApplicationException("Нет ведущих.");
             }
-            var hostsWithMaxPoints = sortedPossibleHosts.Where(v => Math.Abs(v.PriorityPoints - sortedPossibleHosts.Max(h => h.PriorityPoints)) < 0.01).ToList();
+
+            var maxPoints = sortedPossibleHosts.Max(h => h.PriorityPoints);
+            var hostsWithMaxPoints = sortedPossibleHosts.Where(v => Math.Abs(v.PriorityPoints - maxPoints) < 0.01).ToList();
             return hostsWithMaxPoints[this.randomGenerator.Next(0, hostsWithMaxPoints.Count - 1)];
         }
     }
