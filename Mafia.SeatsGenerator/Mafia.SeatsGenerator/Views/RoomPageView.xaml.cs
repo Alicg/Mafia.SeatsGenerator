@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace Mafia.SeatsGenerator.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GamesPageView : ContentPage
+    public partial class RoomPageView : ContentPage
     {
-        public GamesPageView()
+        public RoomPageView()
         {
             InitializeComponent();
         }

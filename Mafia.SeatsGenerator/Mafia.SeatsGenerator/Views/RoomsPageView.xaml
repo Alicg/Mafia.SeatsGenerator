@@ -30,7 +30,7 @@
                 <iconize:IconButton Text="far-times-circle" 
                                     FontFamily="FA-R" FontSize="24" TextColor="Red" BackgroundColor="Transparent"
                                     HorizontalOptions="Start" VerticalOptions="Start" Padding="0"
-                                    Grid.Row="0" Grid.Column="0" WidthRequest="30"
+                                    Grid.Column="0" WidthRequest="30"
                                     Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.RemoveRoomCommand}" CommandParameter="{Binding}"/>
                 <Label Text="{Binding Room.RoomNumber}" FontSize="14"
                        HorizontalTextAlignment="Center"
@@ -39,7 +39,7 @@
                 <iconize:IconButton Text="far-plus-square" 
                                     FontFamily="FA-R" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
                                     HorizontalOptions="Start" WidthRequest="30" VerticalOptions="Center" Padding="0"
-                                    Grid.Row="0" Grid.Column="2" Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.AddRoomCommand}">
+                                    Grid.Column="2" Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.AddRoomCommand}">
                     <iconize:IconButton.IsVisible>
                         <MultiBinding Converter="{StaticResource IsLastCollectionElementConverter}">
                             <Binding Source="{x:Reference Name=STabbedPage}" Path="BindingContext.SortedRoomViewModels"/>
@@ -67,7 +67,7 @@
                 <iconize:IconButton Text="far-plus-square" 
                                     FontFamily="FA-R" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
                                     HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" Padding="0"
-                                    Grid.Row="0" Grid.Column="1" 
+                                    Grid.Column="1" 
                                     Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.AddRoomCommand}">
                     <iconize:IconButton.IsVisible>
                         <MultiBinding Converter="{StaticResource IsLastCollectionElementConverter}">
@@ -82,7 +82,7 @@
     </utils:STabbedPage.TabBarSelectedCellTemplate>
     <utils:STabbedPage.ItemTemplate>
         <DataTemplate>
-            <views:GamesPageView BindingContext="{Binding}"/>
+            <views:RoomPageView BindingContext="{Binding}"/>
         </DataTemplate>
     </utils:STabbedPage.ItemTemplate>
 </utils:STabbedPage>

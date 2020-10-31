@@ -47,7 +47,7 @@ namespace Mafia.SeatsGenerator.ViewModels
             {
                 if (roomViewModel != newRoomVm)
                 {
-                    this.roomViewModels.Remove(roomViewModel);
+                    this.RemoveRoomInternal(roomViewModel);
                 }
             }
         }
@@ -83,8 +83,14 @@ namespace Mafia.SeatsGenerator.ViewModels
             var confirmed = await this.popupService.ConfirmationPopup("Все игры стола пропадут. Удалить выбранный стол?", "Требуется подтверждение");
             if (confirmed.HasValue && confirmed.Value)
             {
-                this.roomViewModels.Remove(roomViewModel);
+                this.RemoveRoomInternal(roomViewModel);
             }
         }
+
+        private void RemoveRoomInternal(RoomPageViewModel roomViewModel)
+        {
+            roomViewModel.ClearRoom();
+            this.roomViewModels.Remove(roomViewModel);
+        } 
     }
 }

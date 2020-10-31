@@ -8,6 +8,7 @@ namespace Mafia.SeatsGenerator.Models
     {
         private int number;
         private PlayerInGame firstKilled;
+        private bool isStopped;
 
         public ObservableCollection<PlayerInGame> Members { get; } = new ObservableCollection<PlayerInGame>();
         
@@ -35,5 +36,15 @@ namespace Mafia.SeatsGenerator.Models
         }
 
         public Color GameColor => GameColors.Colors[this.number % GameColors.Colors.Count];
+
+        public bool IsStopped
+        {
+            get => this.isStopped;
+            set
+            {
+                this.isStopped = value;
+                this.OnPropertyChanged(nameof(this.IsStopped));
+            }
+        }
     }
 }

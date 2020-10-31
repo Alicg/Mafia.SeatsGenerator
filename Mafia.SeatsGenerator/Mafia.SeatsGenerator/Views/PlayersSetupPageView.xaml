@@ -28,6 +28,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
@@ -51,14 +53,18 @@
                                        Grid.Row="1" Grid.Column="3"/>
                                 <CheckBox IsChecked="{Binding IsVip, Mode=TwoWay}" VerticalOptions="Center" 
                                           Grid.Row="1" Grid.Column="4"/>
-                                <Label Text="{Binding PriorityPoints, StringFormat='Игр: {0}'}" VerticalOptions="Center"
+                                <Label Text="Занят:" VerticalOptions="Center"
                                        Grid.Row="1" Grid.Column="5"/>
+                                <CheckBox IsChecked="{Binding IsBusy, Mode=TwoWay}" VerticalOptions="Center" 
+                                          Grid.Row="1" Grid.Column="6"/>
+                                <Label Text="{Binding PriorityPoints, StringFormat='Игр: {0}'}" VerticalOptions="Center"
+                                       Grid.Row="1" Grid.Column="7"/>
                                 <iconize:IconButton Text="far-trash-alt" 
                                                     Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemovePlayerCommand}"
                                                     CommandParameter="{Binding}"
                                                     FontFamily="FA-R" FontSize="19" TextColor="Red" BackgroundColor="Transparent"
                                                     HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" 
-                                                    Grid.Row="0" Grid.RowSpan="2" Grid.Column="6"/>
+                                                    Grid.Row="0" Grid.RowSpan="2" Grid.Column="8"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

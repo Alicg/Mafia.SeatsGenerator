@@ -2,20 +2,19 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Mafia.SeatsGenerator.Views.GamesPageView"
+             x:Class="Mafia.SeatsGenerator.Views.RoomPageView"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
              xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
              xmlns:models="clr-namespace:Mafia.SeatsGenerator.Models;assembly=Mafia.SeatsGenerator"
              xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
-             xmlns:behaviors="clr-namespace:Mafia.SeatsGenerator.Utils.Behaviors;assembly=Mafia.SeatsGenerator"
              mc:Ignorable="d"
-             x:Name="ContentPage"
-             Title="{Binding RoomName}">
+             x:Name="ContentPage">
     <ContentPage.Resources>
         <converters:FirstKilledToBoolConverter x:Key="FirstKilledToBoolConverter"/>
+        <converters:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+        <converters:GameIsStoppedToOpacityConverter x:Key="GameIsStoppedToOpacityConverter"/>
     </ContentPage.Resources>
     <d:ContentPage.BindingContext>
         <viewModels:RoomPageViewModel/>
@@ -27,10 +26,10 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <ScrollView Grid.Row="0">
-                <FlexLayout BindableLayout.ItemsSource="{Binding Games}" Wrap="Wrap" AlignItems="Start" AlignContent="Start">
+                <FlexLayout BindableLayout.ItemsSource="{Binding Room.Games}" Wrap="Wrap" AlignItems="Start" AlignContent="Start">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Frame FlexLayout.Grow="1" BackgroundColor="{Binding GameColor}" HasShadow="True">
+                            <Frame FlexLayout.Grow="1" BackgroundColor="{Binding GameColor}" Opacity="{Binding IsStopped, Converter={StaticResource GameIsStoppedToOpacityConverter}}">
                                 <d:Frame.BindingContext>
                                     <models:Game/>
                                 </d:Frame.BindingContext>
@@ -222,10 +221,22 @@
                                             </iconize:IconLabel.IsVisible>
                                         </iconize:IconLabel>
                                     </StackLayout>
+                                    <iconize:IconButton Text="far-stop-circle" Padding="0"
+                                                        Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.StopGameCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        FontFamily="FA-R" FontSize="28" TextColor="Red" BackgroundColor="Transparent"
+                                                        HorizontalOptions="Center" WidthRequest="40" VerticalOptions="Start"
+                                                        Grid.Row="6" Grid.Column="0" IsVisible="{Binding IsStopped, Converter={StaticResource InvertedBoolConverter}}"/>
+                                    <iconize:IconButton Text="far-play-circle" Padding="0"
+                                                        Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.ResumeGameCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        FontFamily="FA-R" FontSize="28" TextColor="Red" BackgroundColor="Transparent"
+                                                        HorizontalOptions="Center" WidthRequest="40" VerticalOptions="Start"
+                                                        Grid.Row="6" Grid.Column="0" IsVisible="{Binding IsStopped}"/>
                                     <iconize:IconButton Text="far-trash-alt" Padding="0"
                                                         Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemoveGameCommand}"
                                                         CommandParameter="{Binding}"
-                                                        FontFamily="FA-R" FontSize="20" TextColor="Red" BackgroundColor="Transparent"
+                                                        FontFamily="FA-R" FontSize="28" TextColor="Red" BackgroundColor="Transparent"
                                                         HorizontalOptions="Center" WidthRequest="40" VerticalOptions="Start"
                                                         Grid.Row="6" Grid.Column="1"/>
                                 </Grid>

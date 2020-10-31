@@ -29,6 +29,16 @@ namespace Mafia.SeatsGenerator.ViewModels
         public ICommand GenerateNewGameCommand => new Command(this.GenerateNewGame);
         public ICommand RemoveGameCommand => new Command<Game>(this.RemoveGame);
         public ICommand FirstKilledCommand => new Command<PlayerInGame>(this.SetFirstKilled);
+        public ICommand StopGameCommand => new Command<Game>(this.StopGame);
+        public ICommand ResumeGameCommand => new Command<Game>(this.ResumeGame);
+
+        public void ClearRoom()
+        {
+            foreach (var game in this.Room.Games.ToArray())
+            {
+                this.RemoveGame(game);
+            }
+        }
         
         private void SetFirstKilled(PlayerInGame p)
         {
@@ -36,20 +46,35 @@ namespace Mafia.SeatsGenerator.ViewModels
             {
                 p.Game.FirstKilled.Player.PriorityPoints += 0.5;
             }
+
+            if (p.Game.FirstKilled == p)
+            {
+                p.Game.FirstKilled = null;
+                return;
+            }
             p.Game.FirstKilled = p;
             p.Game.FirstKilled.Player.PriorityPoints -= 0.5;
         }
 
         private void GenerateNewGame()
         {
+            var activeGame = this.Room.Games.FirstOrDefault(v => !v.IsStopped);
+            if (activeGame != null)
+            {
+                this.StopGame(activeGame);
+            }
+            
             try
             {
                 var newGame = new Game();
-                newGame.Host = new PlayerInGame(this.GetNewHost(), newGame);
+                var hostPlayer = this.GetNewHost();
+                newGame.Host = new PlayerInGame(hostPlayer, newGame);
+                hostPlayer.IsBusy = true;
             
                 foreach (var player in this.GetNewSetOfPlayers(newGame.Host.Player))
                 {
                     newGame.Members.Add(new PlayerInGame(player, newGame));
+                    player.IsBusy = true;
                 }
                 this.Room.Games.Add(newGame);
             
@@ -82,6 +107,11 @@ namespace Mafia.SeatsGenerator.ViewModels
                     player.Player.PriorityPoints -= 1;
                 }
             }
+
+            if (!game.IsStopped)
+            {
+                this.StopGame(game);
+            }
             
             this.RecalculateNumbers();
         }
@@ -97,13 +127,13 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private IEnumerable<Player> GetNewSetOfPlayers(Player host)
         {
-            var sortedPlayers = this.players.Except(new[] {host}).OrderBy(v => v.IsVip).ThenBy(v => v.PriorityPoints).Take(10);
+            var sortedPlayers = this.players.Where(v => !v.IsBusy).Except(new[] {host}).OrderBy(v => v.IsVip).ThenBy(v => v.PriorityPoints).Take(10);
             return sortedPlayers.OrderBy(v => this.randomGenerator.Next(0, 9));
         }
 
         private Player GetNewHost()
         {
-            var sortedPossibleHosts = this.players.Where(v => v.CanBeHost).OrderBy(v => v.PriorityPoints).ToList();
+            var sortedPossibleHosts = this.players.Where(v => v.CanBeHost && !v.IsBusy).OrderBy(v => v.PriorityPoints).ToList();
             if (sortedPossibleHosts.Count == 0)
             {
                 this.popupService.ShowAlert(@"Установите признак ""Ведущий"" хотя бы для одного игрока во вкладке ""Игроки""", "Нет ведущих.");
@@ -113,6 +143,34 @@ namespace Mafia.SeatsGenerator.ViewModels
             var maxPoints = sortedPossibleHosts.Max(h => h.PriorityPoints);
             var hostsWithMaxPoints = sortedPossibleHosts.Where(v => Math.Abs(v.PriorityPoints - maxPoints) < 0.01).ToList();
             return hostsWithMaxPoints[this.randomGenerator.Next(0, hostsWithMaxPoints.Count - 1)];
+        }
+
+        private void StopGame(Game game)
+        {
+            game.IsStopped = true;
+            game.Host.Player.IsBusy = false;
+            foreach (var gameMember in game.Members)
+            {
+                gameMember.Player.IsBusy = false;
+            }
+        }
+
+        private void ResumeGame(Game game)
+        {
+            foreach (var roomGame in this.Room.Games)
+            {
+                if (roomGame != game)
+                {
+                    this.StopGame(roomGame);
+                }
+            }
+            
+            game.IsStopped = false;
+            game.Host.Player.IsBusy = true;
+            foreach (var gameMember in game.Members)
+            {
+                gameMember.Player.IsBusy = true;
+            }
         }
     }
 }
