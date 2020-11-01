@@ -14,6 +14,7 @@
     </d:ContentPage.BindingContext>
     <ScrollView>
         <StackLayout Orientation="Vertical">
+            <Button Text="Добавить игрока" Command="{Binding AddPlayerCommand}"/>
             <ListView ItemsSource="{Binding Players}" SelectionMode="None" RowHeight="80" HorizontalOptions="FillAndExpand">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -70,7 +71,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Text="Добавить игрока" Command="{Binding AddPlayerCommand}"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>
