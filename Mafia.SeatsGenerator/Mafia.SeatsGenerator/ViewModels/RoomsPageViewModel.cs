@@ -35,6 +35,8 @@ namespace Mafia.SeatsGenerator.ViewModels
             this.AddRoomExecute();
         }
 
+        public string Title => "Рассадка";
+
         public ReadOnlyObservableCollection<RoomPageViewModel> SortedRoomViewModels => this.sortedRoomViewModels;
 
         public ICommand AddRoomCommand => new Command(() => this.AddRoomExecute());

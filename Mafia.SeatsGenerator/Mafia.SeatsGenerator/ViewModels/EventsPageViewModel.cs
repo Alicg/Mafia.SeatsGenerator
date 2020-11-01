@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Mafia.SeatsGenerator.Models;
 using Mafia.SeatsGenerator.Services;
@@ -9,13 +10,13 @@ namespace Mafia.SeatsGenerator.ViewModels
     public class EventsPageViewModel : BindableObject
     {
         private readonly EventsService eventsService;
-        private readonly ObservableCollection<Player> players;
+        private readonly PlayersSetupPageViewModel playersSetupPageViewModel;
         private readonly RoomsPageViewModel roomsPageViewModel;
 
-        public EventsPageViewModel(EventsService eventsService, ObservableCollection<Player> players, RoomsPageViewModel roomsPageViewModel)
+        public EventsPageViewModel(EventsService eventsService, PlayersSetupPageViewModel playersSetupPageViewModel, RoomsPageViewModel roomsPageViewModel)
         {
             this.eventsService = eventsService;
-            this.players = players;
+            this.playersSetupPageViewModel = playersSetupPageViewModel;
             this.roomsPageViewModel = roomsPageViewModel;
 
             var archiveEvents = this.eventsService.SelectAllEvents();
@@ -24,6 +25,8 @@ namespace Mafia.SeatsGenerator.ViewModels
                 this.EventsArchive.Add(archiveEvent);
             }
         }
+
+        public string Title => "Встречи";
         
         public ObservableCollection<Event> EventsArchive { get; } = new ObservableCollection<Event>();
         
@@ -36,7 +39,7 @@ namespace Mafia.SeatsGenerator.ViewModels
             var newEvent = new Event
             {
                 Name = name,
-                Visitors = new ObservableCollection<Player>(this.players)
+                Visitors = new ObservableCollection<Player>(this.playersSetupPageViewModel.Players)
             };
             this.eventsService.AddNewEvent(newEvent);
             this.EventsArchive.Add(newEvent);
@@ -51,11 +54,8 @@ namespace Mafia.SeatsGenerator.ViewModels
         private void LoadEvent(Event eventToLoad)
         {
             this.roomsPageViewModel.Clear();
-            this.players.Clear();
-            foreach (var visitor in eventToLoad.Visitors)
-            {
-                this.players.Add(visitor);
-            }
+            this.playersSetupPageViewModel.ClearPlayers();
+            this.playersSetupPageViewModel.AddRangePlayers(eventToLoad.Visitors.ToArray());
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Mafia.SeatsGenerator.ViewModels
         {
             this.PlayersSetupPageViewModel = new PlayersSetupPageViewModel(this.registeredPlayers);
             this.RoomsPageViewModel = new RoomsPageViewModel(this.registeredPlayers, new PopupService());
-            this.EventsPageViewModel = new EventsPageViewModel(new EventsService(), this.registeredPlayers, this.RoomsPageViewModel);
+            this.EventsPageViewModel = new EventsPageViewModel(new EventsService(), this.PlayersSetupPageViewModel, this.RoomsPageViewModel);
         }
 
         public PlayersSetupPageViewModel PlayersSetupPageViewModel { get; } 

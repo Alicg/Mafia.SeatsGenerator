@@ -91,6 +91,19 @@ namespace Mafia.SeatsGenerator.Utils
             70.0
             );
         public double TabBarHeight { get => (double)this.GetValue(TabBarHeightProperty); set => this.SetValue(TabBarHeightProperty, value); }
+        
+        public static readonly BindableProperty LargeLastCellProperty = BindableProperty.Create(
+            nameof(LargeLastCell),
+            typeof(bool),
+            typeof(STabbedPage),
+            true
+        );
+
+        public bool LargeLastCell
+        {
+            get => (bool) this.GetValue(LargeLastCellProperty);
+            set => this.SetValue(LargeLastCellProperty, value);
+        }
 
         protected Grid _tabBarView = null;
 
@@ -171,7 +184,7 @@ namespace Mafia.SeatsGenerator.Utils
                 
                 gridTabs.ColumnDefinitions.Add(new ColumnDefinition
                 {
-                    Width = new GridLength(isLastPage ? 2 : 1, GridUnitType.Star)
+                    Width = new GridLength(isLastPage && this.LargeLastCell ? 2 : 1, GridUnitType.Star)
                 });
 
                 View cell = (View)this.TabBarCellTemplate.CreateContent();
