@@ -37,6 +37,8 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         public string Title => "Рассадка";
 
+        public int LeftBadgeValue => this.SortedRoomViewModels.SelectMany(v => v.Room.Games.Items).Count();
+
         public ReadOnlyObservableCollection<RoomPageViewModel> SortedRoomViewModels => this.sortedRoomViewModels;
 
         public ICommand AddRoomCommand => new Command(() => this.AddRoomExecute());
@@ -70,6 +72,7 @@ namespace Mafia.SeatsGenerator.ViewModels
         {
             var newVm = new RoomPageViewModel(new Room(roomNumber), this.players, this.popupService);
             this.roomViewModels.Add(newVm);
+            newVm.Room.Games.Connect().Subscribe(v => this.OnPropertyChanged(nameof(this.LeftBadgeValue)));
 
             return newVm;
         }

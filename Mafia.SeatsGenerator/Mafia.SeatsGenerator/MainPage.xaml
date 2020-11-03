@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <utils:STabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+                   xmlns:a="http://xamarin.com/schemas/2014/forms/sha"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
                 xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
                 xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
                 xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
@@ -11,27 +11,36 @@
         <DataTemplate>
             <Grid BackgroundColor="DodgerBlue">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="{Binding LeftBadgeValue}" TextColor="Green" Grid.Column="0" HorizontalOptions="Start"/>
-                <Label Text="{Binding Title}" Grid.Column="1" FontSize="16" FontAttributes="Bold"/>
-                <Label Text="{Binding RightBadgeValue}" TextColor="Red" Grid.Column="2" HorizontalOptions="Start"/>
+                <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="2"/>
+                <Label Text="{Binding LeftBadgeValue}" HorizontalTextAlignment="Center" TextColor="DarkGreen" HorizontalOptions="StartAndExpand" VerticalOptions="Start" FontAttributes="Bold" Grid.Column="1"/>
+                <Label Text="{Binding RightBadgeValue}" HorizontalTextAlignment="Center" TextColor="Red" HorizontalOptions="Start" VerticalOptions="Start" FontAttributes="Bold" Grid.Column="3"/>
             </Grid>
         </DataTemplate>
     </utils:STabbedPage.TabBarCellTemplate>
     <utils:STabbedPage.TabBarSelectedCellTemplate>
         <DataTemplate>
-            <Grid BackgroundColor="Orange">
+            <Grid BackgroundColor="LightBlue">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Label Text="{Binding LeftBadgeValue}" TextColor="GreenYellow" Grid.Column="0" HorizontalOptions="Start"/>
-                <Label Text="{Binding Title}" Grid.Column="1" FontSize="16" FontAttributes="Bold"/>
-                <Label Text="{Binding RightBadgeValue}" TextColor="Red" Grid.Column="2" HorizontalOptions="Start"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2"/>
+                </Grid.RowDefinitions>
+                <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" Grid.Row="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="2"/>
+                <Label Text="{Binding LeftBadgeValue}" HorizontalTextAlignment="Center" TextColor="DarkGreen" HorizontalOptions="StartAndExpand" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Start" FontAttributes="Bold" Grid.Column="1"/>
+                <Label Text="{Binding RightBadgeValue}" HorizontalTextAlignment="Center" TextColor="Red" HorizontalOptions="Start" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Start" FontAttributes="Bold" Grid.Column="3"/>
+                <BoxView Color="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5"/>
             </Grid>
         </DataTemplate>
     </utils:STabbedPage.TabBarSelectedCellTemplate>

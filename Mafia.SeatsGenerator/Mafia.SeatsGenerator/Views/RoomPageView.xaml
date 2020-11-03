@@ -26,7 +26,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <ScrollView Grid.Row="0">
-                <FlexLayout BindableLayout.ItemsSource="{Binding Room.Games}" Wrap="Wrap" AlignItems="Start" AlignContent="Start">
+                <FlexLayout BindableLayout.ItemsSource="{Binding Room.BindingListOfGames}" Wrap="Wrap" AlignItems="Start" AlignContent="Start">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <Frame FlexLayout.Grow="1" BackgroundColor="{Binding GameColor}" Opacity="{Binding IsStopped, Converter={StaticResource GameIsStoppedToOpacityConverter}}">

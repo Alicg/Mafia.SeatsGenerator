@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using DynamicData;
 using Mafia.SeatsGenerator.Models;
 using Mafia.SeatsGenerator.Services;
 using Xamarin.Forms;
@@ -34,7 +35,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         public void ClearRoom()
         {
-            foreach (var game in this.Room.Games.ToArray())
+            foreach (var game in this.Room.Games.Items.ToArray())
             {
                 this.RemoveGame(game);
             }
@@ -58,7 +59,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void GenerateNewGame()
         {
-            var activeGame = this.Room.Games.FirstOrDefault(v => !v.IsStopped);
+            var activeGame = this.Room.Games.Items.FirstOrDefault(v => !v.IsStopped);
             if (activeGame != null)
             {
                 this.StopGame(activeGame);
@@ -120,7 +121,7 @@ namespace Mafia.SeatsGenerator.ViewModels
         {
             for (var index = 0; index < this.Room.Games.Count; index++)
             {
-                var game = this.Room.Games[index];
+                var game = this.Room.Games.Items.ToList()[index];
                 game.Number = index + 1;
             }
         }
@@ -157,7 +158,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void ResumeGame(Game game)
         {
-            foreach (var roomGame in this.Room.Games)
+            foreach (var roomGame in this.Room.Games.Items)
             {
                 if (roomGame != game)
                 {

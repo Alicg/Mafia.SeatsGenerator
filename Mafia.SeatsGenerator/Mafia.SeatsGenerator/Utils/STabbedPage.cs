@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -234,8 +235,17 @@ namespace Mafia.SeatsGenerator.Utils
 
             for(int i=0; i<this.Children.Count; i++)
             {
-                this.cells[i].IsVisible = this.Children[i] != this.CurrentPage;
-                this.selectedCells[i].IsVisible = !this.cells[i].IsVisible;
+                this.SetViewVisibility(this.cells[i], this.Children[i] != this.CurrentPage);
+                this.SetViewVisibility(this.selectedCells[i], !this.cells[i].IsVisible);
+            }
+        }
+
+        private void SetViewVisibility(View view, bool visibility)
+        {
+            view.IsVisible = visibility;
+            foreach (var child in view.LogicalChildren.OfType<VisualElement>())
+            {
+                child.IsVisible = visibility;
             }
         }
 

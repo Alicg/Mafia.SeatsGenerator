@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using System;
 using Mafia.SeatsGenerator.Models;
+using Mafia.SeatsGenerator.Utils;
 using Xamarin.Forms;
 
 namespace Mafia.SeatsGenerator.ViewModels
@@ -26,7 +28,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         public void ClearPlayers()
         {
-            foreach (var player in this.Players)
+            foreach (var player in this.Players.ToArray())
             {
                 this.Players.Remove(player);
             }
@@ -41,7 +43,7 @@ namespace Mafia.SeatsGenerator.ViewModels
         {
             foreach (var player in players)
             {
-                this.Players.Add(player);
+                this.AddPlayerInternal(player);
             }
             
             this.RecalculateNumbers();
@@ -53,7 +55,7 @@ namespace Mafia.SeatsGenerator.ViewModels
         private void AddPlayer()
         {
             var visitor = new Player();
-            this.Players.Add(visitor);
+            this.AddPlayerInternal(visitor);
             this.RecalculateNumbers();
             
             this.OnPropertyChanged(nameof(this.LeftBadgeValue));
@@ -76,6 +78,16 @@ namespace Mafia.SeatsGenerator.ViewModels
                 var player = this.Players[index];
                 player.Number = index + 1;
             }
+        }
+
+        private void AddPlayerInternal(Player visitor)
+        {
+            this.Players.Add(visitor);
+            visitor.OnAnyPropertyChanges(nameof(Player.IsBusy)).Subscribe(_ =>
+            {
+                this.OnPropertyChanged(nameof(this.LeftBadgeValue));
+                this.OnPropertyChanged(nameof(this.RightBadgeValue));
+            });
         }
     }
 }
