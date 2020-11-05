@@ -16,14 +16,14 @@ namespace Mafia.SeatsGenerator.ViewModels
     {
         private readonly SourceList<RoomPageViewModel> roomViewModels = new SourceList<RoomPageViewModel>();
         
-        private readonly ObservableCollection<Player> players;
+        private readonly PlayersSetupPageViewModel playersSetupPageViewModel;
         private readonly PopupService popupService;
         
         private readonly ReadOnlyObservableCollection<RoomPageViewModel> sortedRoomViewModels;
 
-        public RoomsPageViewModel(ObservableCollection<Player> players, PopupService popupService)
+        public RoomsPageViewModel(PlayersSetupPageViewModel playersSetupPageViewModel, PopupService popupService)
         {
-            this.players = players;
+            this.playersSetupPageViewModel = playersSetupPageViewModel;
             this.popupService = popupService;
             
             this.roomViewModels.Connect()
@@ -70,7 +70,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private RoomPageViewModel AddRoomExecute(int roomNumber)
         {
-            var newVm = new RoomPageViewModel(new Room(roomNumber), this.players, this.popupService);
+            var newVm = new RoomPageViewModel(new Room(roomNumber), this.playersSetupPageViewModel, this.popupService);
             this.roomViewModels.Add(newVm);
             newVm.Room.Games.Connect().Subscribe(v => this.OnPropertyChanged(nameof(this.LeftBadgeValue)));
 

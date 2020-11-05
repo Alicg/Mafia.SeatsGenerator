@@ -8,6 +8,7 @@ namespace Mafia.SeatsGenerator.Models
         private int _number;
         private double priorityPoints;
         private bool isBusy;
+        private bool canBeHost;
 
         public string Name
         {
@@ -19,8 +20,16 @@ namespace Mafia.SeatsGenerator.Models
             }
         }
 
-        public bool CanBeHost { get; set; }
-        
+        public bool CanBeHost
+        {
+            get => this.canBeHost;
+            set
+            {
+                this.canBeHost = value;
+                this.OnPropertyChanged(nameof(this.CanBeHost));
+            }
+        }
+
         public bool IsVip { get; set; }
         
         public int Number

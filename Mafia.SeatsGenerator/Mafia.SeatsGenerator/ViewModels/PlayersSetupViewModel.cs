@@ -2,7 +2,10 @@
 using System.Linq;
 using System.Windows.Input;
 using System;
+using DynamicData;
+using DynamicData.Binding;
 using Mafia.SeatsGenerator.Models;
+using Mafia.SeatsGenerator.Services;
 using Mafia.SeatsGenerator.Utils;
 using Xamarin.Forms;
 
@@ -10,9 +13,16 @@ namespace Mafia.SeatsGenerator.ViewModels
 {
     public class PlayersSetupPageViewModel : BindableObject
     {
-        public PlayersSetupPageViewModel(ObservableCollection<Player> players)
+        private readonly ReadOnlyObservableCollection<Player> readOnlyObservableCollection;
+        private readonly PopupService popupService;
+        
+        private readonly SourceList<Player> playersSourceList = new SourceList<Player>(); 
+
+        public PlayersSetupPageViewModel(PopupService popupService)
         {
-            this.Players = players;
+            this.popupService = popupService;
+
+            this.playersSourceList.Connect().Bind(out this.readOnlyObservableCollection).Subscribe();
         }
 
         public string Title => "Игроки";
@@ -20,18 +30,15 @@ namespace Mafia.SeatsGenerator.ViewModels
         public int LeftBadgeValue => this.Players.Count(v => !v.IsBusy);
         
         public int RightBadgeValue => this.Players.Count(v => v.IsBusy);
-        
-        public ObservableCollection<Player> Players { get; }
+
+        public ReadOnlyObservableCollection<Player> Players => this.readOnlyObservableCollection;
 
         public ICommand AddPlayerCommand => new Command(this.AddPlayer);
-        public ICommand RemovePlayerCommand => new Command<Player>(this.RemovePlayer);
+        public ICommand RemovePlayerCommand => new Command<Player>(this.RemovePlayerExecute);
 
         public void ClearPlayers()
         {
-            foreach (var player in this.Players.ToArray())
-            {
-                this.Players.Remove(player);
-            }
+            this.playersSourceList.Clear();
             
             this.RecalculateNumbers();
             
@@ -41,13 +48,18 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         public void AddRangePlayers(Player[] players)
         {
-            foreach (var player in players)
-            {
-                this.AddPlayerInternal(player);
-            }
+            this.playersSourceList.AddRange(players);
             
             this.RecalculateNumbers();
             
+            foreach (var player in players)
+            {
+                player.OnAnyPropertyChanges(nameof(Player.IsBusy)).Subscribe(_ =>
+                {
+                    this.OnPropertyChanged(nameof(this.LeftBadgeValue));
+                    this.OnPropertyChanged(nameof(this.RightBadgeValue));
+                });
+            }
             this.OnPropertyChanged(nameof(this.LeftBadgeValue));
             this.OnPropertyChanged(nameof(this.RightBadgeValue));
         }
@@ -62,13 +74,17 @@ namespace Mafia.SeatsGenerator.ViewModels
             this.OnPropertyChanged(nameof(this.RightBadgeValue));
         }
 
-        private void RemovePlayer(Player player)
+        private async void RemovePlayerExecute(Player player)
         {
-            this.Players.Remove(player);
-            this.RecalculateNumbers();
+            var confirmed = await this.popupService.ConfirmationPopup($"Удалить игрока '{player.Name}'?", "Требуется подтверждение"); 
+            if (confirmed.HasValue && confirmed.Value)
+            {
+                this.playersSourceList.Remove(player);
+                this.RecalculateNumbers();
             
-            this.OnPropertyChanged(nameof(this.LeftBadgeValue));
-            this.OnPropertyChanged(nameof(this.RightBadgeValue));
+                this.OnPropertyChanged(nameof(this.LeftBadgeValue));
+                this.OnPropertyChanged(nameof(this.RightBadgeValue));
+            }
         }
 
         private void RecalculateNumbers()
@@ -82,7 +98,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void AddPlayerInternal(Player visitor)
         {
-            this.Players.Add(visitor);
+            this.playersSourceList.Add(visitor);
             visitor.OnAnyPropertyChanges(nameof(Player.IsBusy)).Subscribe(_ =>
             {
                 this.OnPropertyChanged(nameof(this.LeftBadgeValue));

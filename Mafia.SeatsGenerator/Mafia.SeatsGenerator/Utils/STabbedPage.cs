@@ -243,7 +243,7 @@ namespace Mafia.SeatsGenerator.Utils
         private void SetViewVisibility(View view, bool visibility)
         {
             view.IsVisible = visibility;
-            foreach (var child in view.LogicalChildren.OfType<VisualElement>())
+            foreach (var child in view.LogicalChildren.OfType<Label>())
             {
                 child.IsVisible = visibility;
             }

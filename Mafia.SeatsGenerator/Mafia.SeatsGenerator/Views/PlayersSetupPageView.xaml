@@ -7,70 +7,72 @@
              x:Class="Mafia.SeatsGenerator.Views.PlayersSetupPageView"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
+             xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             xmlns:models="clr-namespace:XF.Material.Forms.Models;assembly=XF.Material"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=netstandard"
+             xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
              mc:Ignorable="d"
              x:Name="ContentPage">
     <d:ContentPage.BindingContext>
         <viewModels:PlayersSetupPageViewModel/>
     </d:ContentPage.BindingContext>
-    <ScrollView>
-        <StackLayout Orientation="Vertical">
-            <Button Text="Добавить игрока" Command="{Binding AddPlayerCommand}"/>
-            <ListView ItemsSource="{Binding Players}" SelectionMode="None" RowHeight="80" HorizontalOptions="FillAndExpand">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid HorizontalOptions="FillAndExpand">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Number}" FontSize="20"
-                                       Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center"/>
-                                <Entry Placeholder="Введите ник игрока"
-                                       Text="{Binding Name, Mode=TwoWay}" HorizontalOptions="FillAndExpand" 
-                                       Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"/>
-                                <iconize:IconButton Text="far-caret-square-down" 
-                                                    FontFamily="FA-R" FontSize="19" TextColor="Green" BackgroundColor="Transparent"
-                                                    HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" 
-                                                    Grid.Row="0" Grid.Column="5"
-                                                    Clicked="Button_OnClicked"/>
-                                <Label Text="Ведущий:" VerticalOptions="Center"
-                                       Grid.Row="1" Grid.Column="1"/>
-                                <CheckBox IsChecked="{Binding CanBeHost, Mode=TwoWay}" 
-                                          VerticalOptions="Center" Margin="0,0,5,0" 
-                                          Grid.Row="1" Grid.Column="2"/>
-                                <Label Text="VIP:" VerticalOptions="Center"
-                                       Grid.Row="1" Grid.Column="3"/>
-                                <CheckBox IsChecked="{Binding IsVip, Mode=TwoWay}" VerticalOptions="Center" 
-                                          Grid.Row="1" Grid.Column="4"/>
-                                <Label Text="Занят:" VerticalOptions="Center"
-                                       Grid.Row="1" Grid.Column="5"/>
-                                <CheckBox IsChecked="{Binding IsBusy, Mode=TwoWay}" VerticalOptions="Center" 
-                                          Grid.Row="1" Grid.Column="6"/>
-                                <Label Text="{Binding PriorityPoints, StringFormat='Игр: {0}'}" VerticalOptions="Center"
-                                       Grid.Row="1" Grid.Column="7"/>
-                                <iconize:IconButton Text="far-trash-alt" 
-                                                    Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemovePlayerCommand}"
-                                                    CommandParameter="{Binding}"
-                                                    FontFamily="FA-R" FontSize="19" TextColor="Red" BackgroundColor="Transparent"
-                                                    HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" 
-                                                    Grid.Row="0" Grid.RowSpan="2" Grid.Column="8"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
-    </ScrollView>
+    <ContentPage.Resources>
+        <converters:IsLastCollectionElementConverter x:Key="IsLastCollectionElementConverter"/>
+        <converters:CanBeHostToBackgroundColorConverter x:Key="CanBeHostToBackgroundColorConverter"/>
+        <generic:List x:TypeArguments="models:MaterialMenuItem" x:Key="MoreButtonMenuItems" x:Name="MoreButtonMenuItems">
+            <models:MaterialMenuItem Text="{x:Static views:PlayersSetupPageView.EditMenuName}"/>
+            <models:MaterialMenuItem Text="{x:Static views:PlayersSetupPageView.DeleteMenuName}"/>
+        </generic:List>
+    </ContentPage.Resources>
+    <StackLayout Orientation="Vertical">
+        <Button Text="Добавить игрока" Command="{Binding AddPlayerCommand}"/>
+        <ListView x:Name="PlayersListView" ItemsSource="{Binding Players}" SelectionMode="None" HorizontalOptions="FillAndExpand">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid BackgroundColor="{Binding CanBeHost, Converter={StaticResource CanBeHostToBackgroundColorConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Number}" FontSize="20"
+                                   Grid.Column="0" VerticalOptions="Center"/>
+                            <Entry Placeholder="Введите ник игрока"
+                                   Text="{Binding Name, Mode=TwoWay}" HorizontalOptions="FillAndExpand"
+                                   Grid.Column="1"/>
+                            <iconize:IconButton Text="far-plus-square"
+                                                Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.AddPlayerCommand}"
+                                                CommandParameter="{Binding}"
+                                                FontFamily="FA-R" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
+                                                HorizontalOptions="Start" WidthRequest="50" VerticalOptions="Center"
+                                                Grid.Column="2">
+                                <iconize:IconButton.IsVisible>
+                                    <MultiBinding Converter="{StaticResource IsLastCollectionElementConverter}">
+                                        <Binding Source="{x:Reference ContentPage}" Path="BindingContext.Players"/>
+                                        <Binding/>
+                                        <Binding Source="{x:Reference ContentPage}" Path="BindingContext.Players.Count"/>
+                                    </MultiBinding>
+                                </iconize:IconButton.IsVisible>
+                            </iconize:IconButton>
+                            <!-- <iconize:IconButton Text="far-caret-square-down" -->
+                            <!--                     FontFamily="FA-R" FontSize="19" TextColor="Green" BackgroundColor="Transparent" -->
+                            <!--                     HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" -->
+                            <!--                     Grid.Row="0" Grid.Column="3" -->
+                            <!--                     Clicked="Button_OnClicked"/> -->
+                            <Label Text="{Binding PriorityPoints, StringFormat='Игр: {0}'}" VerticalOptions="Center"
+                                   Grid.Row="0" Grid.Column="3" FontSize="20"/>
+                            <ui:MaterialMenuButton x:Name="MoreButton" Image="icon_more.png"
+                                                   BackgroundColor="Transparent"
+                                                   HorizontalOptions="Start" WidthRequest="45" VerticalOptions="Center"
+                                                   Grid.Row="0" Grid.Column="4" ButtonType="Elevated" Choices="{StaticResource MoreButtonMenuItems}" MenuSelected="MoreButton_OnMenuSelected"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>

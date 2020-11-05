@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using DynamicData;
@@ -12,15 +11,15 @@ namespace Mafia.SeatsGenerator.ViewModels
 {
     public class RoomPageViewModel : BindableObject
     {
-        private Random randomGenerator = new Random();
-        private readonly ObservableCollection<Player> players;
+        private readonly Random randomGenerator = new Random();
+        private readonly PlayersSetupPageViewModel playersSetupPageViewModel;
         private readonly PopupService popupService;
 
         public RoomPageViewModel() { }
 
-        public RoomPageViewModel(Room room, ObservableCollection<Player> players, PopupService popupService)
+        public RoomPageViewModel(Room room, PlayersSetupPageViewModel playersSetupPageViewModel, PopupService popupService)
         {
-            this.players = players;
+            this.playersSetupPageViewModel = playersSetupPageViewModel;
             this.popupService = popupService;
             this.Room = room;
         }
@@ -128,13 +127,13 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private IEnumerable<Player> GetNewSetOfPlayers(Player host)
         {
-            var sortedPlayers = this.players.Where(v => !v.IsBusy).Except(new[] {host}).OrderBy(v => v.IsVip).ThenBy(v => v.PriorityPoints).Take(10);
+            var sortedPlayers = this.playersSetupPageViewModel.Players.Where(v => !v.IsBusy).Except(new[] {host}).OrderBy(v => v.IsVip).ThenBy(v => v.PriorityPoints).Take(10);
             return sortedPlayers.OrderBy(v => this.randomGenerator.Next(0, 9));
         }
 
         private Player GetNewHost()
         {
-            var sortedPossibleHosts = this.players.Where(v => v.CanBeHost && !v.IsBusy).OrderBy(v => v.PriorityPoints).ToList();
+            var sortedPossibleHosts = this.playersSetupPageViewModel.Players.Where(v => v.CanBeHost && !v.IsBusy).OrderBy(v => v.PriorityPoints).ToList();
             if (sortedPossibleHosts.Count == 0)
             {
                 this.popupService.ShowAlert(@"Установите признак ""Ведущий"" хотя бы для одного игрока во вкладке ""Игроки""", "Нет ведущих.");

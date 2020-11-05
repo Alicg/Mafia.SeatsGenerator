@@ -2,6 +2,7 @@
 using Mafia.SeatsGenerator.Models;
 using Mafia.SeatsGenerator.Utils;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 namespace Mafia.SeatsGenerator
 {
@@ -10,6 +11,8 @@ namespace Mafia.SeatsGenerator
         public MainPage()
         {
             InitializeComponent();
+            
+            this.On<Xamarin.Forms.PlatformConfiguration.Android>().SetIsSwipePagingEnabled(false);
         }
     }
 }

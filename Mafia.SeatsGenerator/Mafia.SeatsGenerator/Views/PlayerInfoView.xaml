@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
+             x:Class="Mafia.SeatsGenerator.Views.PlayerInfoView"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:Mafia.SeatsGenerator.Models;assembly=Mafia.SeatsGenerator"
+             mc:Ignorable="d"
+             HorizontalOptions="FillAndExpand"
+             VerticalOptions="FillAndExpand">
+       <d:Grid.BindingContext>
+           <models:Player/>
+       </d:Grid.BindingContext>
+       <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Label Text="Ведущий:" VerticalOptions="Center" FontSize="24"
+             Grid.Row="0" Grid.Column="0"/>
+      <CheckBox IsChecked="{Binding CanBeHost, Mode=TwoWay}" HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Row="0" Grid.Column="1"/>
+      <Label Text="VIP:" VerticalOptions="Center" FontSize="24"
+             Grid.Row="1" Grid.Column="0"/>
+      <CheckBox IsChecked="{Binding IsVip, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Center"
+                Grid.Row="1" Grid.Column="1"/>
+      <Label Text="Занят:" VerticalOptions="Center" FontSize="24"
+             Grid.Row="2" Grid.Column="0"/>
+      <CheckBox IsChecked="{Binding IsBusy, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Center"
+                Grid.Row="2" Grid.Column="1"/>
+</Grid>

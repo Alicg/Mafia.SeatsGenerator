@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -7,20 +9,59 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Mafia.SeatsGenerator.Models;
+using Mafia.SeatsGenerator.ViewModels;
 using Plugin.Iconize;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using XF.Material.Forms.UI;
 using XF.Material.Forms.UI.Dialogs;
-using XF.Material.Forms.UI.Dialogs.Configurations;
 
 namespace Mafia.SeatsGenerator.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PlayersSetupPageView : ContentPage
     {
+        public const string EditMenuName = "Редактировать";
+        public const string DeleteMenuName = "Удалить";
+        private PlayersSetupPageViewModel viewModel;
+        
         public PlayersSetupPageView()
         {
             InitializeComponent();
+        }
+
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+
+            if (this.BindingContext is PlayersSetupPageViewModel vm)
+            {
+                this.viewModel = vm;
+                ((INotifyCollectionChanged)vm.Players).CollectionChanged += async (sender, args) =>
+                {
+                    if (((MainPage) this.Parent).CurrentPage != this)
+                    {
+                        return;
+                    }
+                    
+                    var lastItem = vm.Players.LastOrDefault();
+                    if (lastItem != null)
+                    {
+                        this.PlayersListView.ScrollTo(lastItem, ScrollToPosition.Center, false);
+
+                        var lastEntry = await Task.Run(() =>
+                        {
+
+                            var cells = this.PlayersListView.TemplatedItems.SelectMany(v => v.LogicalChildren);
+                            var entries = cells.SelectMany(v => v.LogicalChildren).OfType<Entry>();
+                            return entries.LastOrDefault();
+                        });
+                        
+                        await Task.Delay(100);
+                        lastEntry?.Focus();
+                    }
+                };
+            }
         }
 
         private async void Button_OnClicked(object sender, EventArgs e)
@@ -34,7 +75,6 @@ namespace Mafia.SeatsGenerator.Views
                 }
 
                 List<string> names;
-                
                 using(await MaterialDialog.Instance.LoadingDialogAsync(message: "Ищу игроков на the-mafia.net..."))
                 {
                     names = await this.SelectPlayerNameOptions(player.Name);
@@ -47,11 +87,11 @@ namespace Mafia.SeatsGenerator.Views
                 }
             }
         }
-        
+
         private async Task<List<string>> SelectPlayerNameOptions(string namePart)
         {
             var retList = new List<string>();
-            var uri = new Uri ($@"https://the-mafia.net/index.php?q=autocmpl/users/{namePart}");
+            var uri = new Uri($@"https://the-mafia.net/index.php?q=autocmpl/users/{namePart}");
             var client = new HttpClient();
             try
             {
@@ -105,6 +145,28 @@ namespace Mafia.SeatsGenerator.Views
             }
 
             return Encoding.Unicode.GetString(byteString.ToArray());
+        }
+
+        private void MoreButton_OnMenuSelected(object sender, MenuSelectedEventArgs e)
+        {
+            if (sender is MaterialMenuButton menuButton)
+            {
+                var player = menuButton.BindingContext as Player;
+                var menuText = this.MoreButtonMenuItems[e.Result.Index].Text;
+                switch (menuText)
+                {
+                    case EditMenuName:
+                    {
+                        MaterialDialog.Instance.ShowCustomContentAsync(new PlayerInfoView {BindingContext = player}, null, "Информация игрока", dismissiveText:null);
+                        break;
+                    }
+                    case DeleteMenuName:
+                    {
+                        this.viewModel?.RemovePlayerCommand.Execute(player);
+                        break;
+                    }
+                }
+            }
         }
     }
 }
