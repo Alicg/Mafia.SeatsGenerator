@@ -81,6 +81,9 @@
     <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VibratorRenderer.cs" />
+    <Compile Include="MultiGestureViewRenderer.cs" />
+    <Compile Include="Effects\AndroidLongPressedEffect.cs" />
     <Compile Include="STabbedPageRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

@@ -5,6 +5,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Mafia.SeatsGenerator.Android.Effects;
 
 namespace Mafia.SeatsGenerator.Android
 {
@@ -17,6 +18,7 @@ namespace Mafia.SeatsGenerator.Android
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            AndroidLongPressedEffect.Initialize();
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             XF.Material.Droid.Material.Init(this, savedInstanceState);
             LoadApplication(new App());

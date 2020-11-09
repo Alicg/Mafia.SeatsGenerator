@@ -61,5 +61,22 @@ namespace Mafia.SeatsGenerator.Models
                 this.OnPropertyChanged(nameof(this.PriorityPoints));
             }
         }
+
+        public void DecreasePriority(bool firstKilled)
+        {
+            if (firstKilled)
+            {
+                this.PriorityPoints -= 0.5;
+            }
+            else
+            {
+                this.PriorityPoints -= 1;
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"{this.Name}; Игр:{this.PriorityPoints}";
+        }
     }
 }

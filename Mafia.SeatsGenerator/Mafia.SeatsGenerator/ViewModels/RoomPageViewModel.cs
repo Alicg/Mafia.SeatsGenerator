@@ -31,6 +31,8 @@ namespace Mafia.SeatsGenerator.ViewModels
         public ICommand FirstKilledCommand => new Command<PlayerInGame>(this.SetFirstKilled);
         public ICommand StopGameCommand => new Command<Game>(this.StopGame);
         public ICommand ResumeGameCommand => new Command<Game>(this.ResumeGame);
+        public ICommand ChangeHostCommand => new Command<Game>(this.ChangeHost);
+        public ICommand ChangePlayerCommand => new Command<PlayerInGame>(this.ChangePlayer);
 
         public void ClearRoom()
         {
@@ -92,20 +94,19 @@ namespace Mafia.SeatsGenerator.ViewModels
             }
         }
 
-        private void RemoveGame(Game game)
+        private async void RemoveGame(Game game)
         {
+            var confirmed = await this.popupService.ConfirmationPopup("Удалить игру?", "Удаление игры."); 
+            if (!confirmed.HasValue || !confirmed.Value) 
+            {
+                return;
+            }
+            
             this.Room.Games.Remove(game);
             
             foreach (var player in game.Members)
             {
-                if (game.FirstKilled == player)
-                {
-                    player.Player.PriorityPoints -= 0.5;
-                }
-                else
-                {
-                    player.Player.PriorityPoints -= 1;
-                }
+                player.Player.DecreasePriority(game.FirstKilled == player);
             }
 
             if (!game.IsStopped)
@@ -170,6 +171,47 @@ namespace Mafia.SeatsGenerator.ViewModels
             foreach (var gameMember in game.Members)
             {
                 gameMember.Player.IsBusy = true;
+            }
+        }
+
+        private async void ChangeHost(Game game)
+        {
+            var possibleHosts = this.playersSetupPageViewModel.Players.Where(v => v.CanBeHost && !v.IsBusy && v != game.Host.Player).OrderByDescending(v => v.PriorityPoints).ToList();
+
+            var newHost = await this.popupService.SelectChoicePopup(possibleHosts, "Выберите нового ведущего");
+            if (newHost != null)
+            {
+                game.Host.Player.IsBusy = false;
+                game.Host = new PlayerInGame(newHost, game);
+                newHost.IsBusy = true;
+            }
+        }
+
+        private async void ChangePlayer(PlayerInGame playerInGame)
+        {
+            if (playerInGame.Game.FirstKilled == playerInGame)
+            {
+                // снимаем признак ПУ если он стоит на игроке.
+                this.SetFirstKilled(playerInGame);
+            }
+            
+            var possiblePlayers = this.playersSetupPageViewModel.Players.Where(v => !v.IsBusy && v != playerInGame.Player).OrderBy(v => v.PriorityPoints).ToList();
+
+            var newPlayer = await this.popupService.SelectChoicePopup(possiblePlayers, "Выберите нового игрока");
+            if (newPlayer != null)
+            {
+                var currentSeat = playerInGame.Game.Members.IndexOf(playerInGame);
+                if (currentSeat != -1)
+                {
+                    playerInGame.Game.Members.RemoveAt(currentSeat);
+                    playerInGame.Game.Members.Insert(currentSeat, new PlayerInGame(newPlayer, playerInGame.Game));
+
+                    playerInGame.Player.PriorityPoints -= 1;
+                    playerInGame.Player.IsBusy = false;
+                    
+                    newPlayer.PriorityPoints += 1;
+                    newPlayer.IsBusy = true;
+                }
             }
         }
     }

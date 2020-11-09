@@ -9,10 +9,22 @@ namespace Mafia.SeatsGenerator.Models
         private int number;
         private PlayerInGame firstKilled;
         private bool isStopped;
+        private PlayerInGame host;
 
         public ObservableCollection<PlayerInGame> Members { get; } = new ObservableCollection<PlayerInGame>();
+
+        public string HostName => this.Host?.Player?.Name;
         
-        public PlayerInGame Host { get; set; }
+        public PlayerInGame Host
+        {
+            get => this.host;
+            set
+            {
+                this.host = value;
+                this.OnPropertyChanged(nameof(this.Host));
+                this.OnPropertyChanged(nameof(this.HostName));
+            }
+        }
 
         public PlayerInGame FirstKilled
         {

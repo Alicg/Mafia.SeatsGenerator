@@ -149,7 +149,7 @@ namespace Mafia.SeatsGenerator.Views
 
         private void MoreButton_OnMenuSelected(object sender, MenuSelectedEventArgs e)
         {
-            if (sender is MaterialMenuButton menuButton)
+            if (sender is MaterialMenuButton menuButton && e.Result.Index >= 0)
             {
                 var player = menuButton.BindingContext as Player;
                 var menuText = this.MoreButtonMenuItems[e.Result.Index].Text;

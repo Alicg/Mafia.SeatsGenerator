@@ -17,6 +17,7 @@
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto"/>
@@ -35,4 +36,7 @@
              Grid.Row="2" Grid.Column="0"/>
       <CheckBox IsChecked="{Binding IsBusy, Mode=TwoWay}" VerticalOptions="Center" HorizontalOptions="Center"
                 Grid.Row="2" Grid.Column="1"/>
+      <Label Text="Игр:" VerticalOptions="Center" FontSize="24"
+             Grid.Row="3" Grid.Column="0"/>
+      <Entry Text="{Binding PriorityPoints}" Keyboard="Numeric" Grid.Row="3" Grid.Column="1" HorizontalTextAlignment="Center"/>
 </Grid>
