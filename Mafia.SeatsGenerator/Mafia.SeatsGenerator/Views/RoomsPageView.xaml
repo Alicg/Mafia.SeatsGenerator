@@ -5,14 +5,15 @@
              xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
              xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
              x:Class="Mafia.SeatsGenerator.Views.RoomsPageView"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
              xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              mc:Ignorable="d"
              ItemsSource="{Binding SortedRoomViewModels, Mode=OneWay}" TabBarPosition="Bottom" TabBarHeight="40"
-             x:Name="STabbedPage">
+             x:Name="STabbedPage"
+             CurrentPageChanged="RoomsPageView_OnCurrentPageChanged">
     <utils:STabbedPage.Resources>
         <converters:IsLastCollectionElementConverter x:Key="IsLastCollectionElementConverter"/>
     </utils:STabbedPage.Resources>

@@ -39,7 +39,7 @@ namespace Mafia.SeatsGenerator.Views
                 this.viewModel = vm;
                 ((INotifyCollectionChanged)vm.Players).CollectionChanged += async (sender, args) =>
                 {
-                    if (((MainPage) this.Parent).CurrentPage != this)
+                    if (((MainPage) this.Parent).CurrentPage != this || args.Action != NotifyCollectionChangedAction.Add)
                     {
                         return;
                     }

@@ -20,6 +20,7 @@ namespace Mafia.SeatsGenerator.ViewModels
         private readonly PopupService popupService;
         
         private readonly ReadOnlyObservableCollection<RoomPageViewModel> sortedRoomViewModels;
+        private BindableObject selectedRoomPage;
 
         public RoomsPageViewModel(PlayersSetupPageViewModel playersSetupPageViewModel, PopupService popupService)
         {
@@ -35,7 +36,19 @@ namespace Mafia.SeatsGenerator.ViewModels
             this.AddRoomExecute();
         }
 
-        public string Title => "Рассадка";
+        public BindableObject SelectedRoomPage
+        {
+            get => this.selectedRoomPage;
+            set
+            {
+                if (this.selectedRoomPage == value)
+                {
+                    return;
+                }
+                this.selectedRoomPage = value;
+                this.OnPropertyChanged(nameof(this.SelectedRoomPage));
+            }
+        }
 
         public int LeftBadgeValue => this.SortedRoomViewModels.SelectMany(v => v.Room.Games.Items).Count();
 

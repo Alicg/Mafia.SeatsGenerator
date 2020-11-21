@@ -6,7 +6,7 @@
                 xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
                 xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
                 x:Class="Mafia.SeatsGenerator.MainPage"
-                x:Name="ContentPage" TabBarHeight="40" LargeLastCell="False">
+                x:Name="ContentPage" TabBarHeight="35" LargeLastCell="False">
     <utils:STabbedPage.TabBarCellTemplate>
         <DataTemplate>
             <Grid BackgroundColor="DodgerBlue">
@@ -48,6 +48,6 @@
         <viewModels:MainViewModel/>
     </utils:STabbedPage.BindingContext>
     <views:PlayersSetupPageView Title="Игроки" BindingContext="{Binding PlayersSetupPageViewModel}"/>
-    <views:RoomsPageView Title="Рассадка" BindingContext="{Binding RoomsPageViewModel}"/>
+    <views:AllocationPageView Title="Рассадка" BindingContext="{Binding AllocationPageViewModel}"/>
     <views:EventsPageView Title="Встречи" BindingContext="{Binding EventsPageViewModel}"/>
 </utils:STabbedPage>

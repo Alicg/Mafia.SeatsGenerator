@@ -31,10 +31,11 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid BackgroundColor="{Binding CanBeHost, Converter={StaticResource CanBeHostToBackgroundColorConverter}}">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -58,17 +59,14 @@
                                     </MultiBinding>
                                 </iconize:IconButton.IsVisible>
                             </iconize:IconButton>
-                            <!-- <iconize:IconButton Text="far-caret-square-down" -->
-                            <!--                     FontFamily="FA-R" FontSize="19" TextColor="Green" BackgroundColor="Transparent" -->
-                            <!--                     HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" -->
-                            <!--                     Grid.Row="0" Grid.Column="3" -->
-                            <!--                     Clicked="Button_OnClicked"/> -->
-                            <Label Text="{Binding PriorityPoints, StringFormat='Игр: {0}'}" VerticalOptions="Center"
+                            <Label Text="{Binding PlayedGames, StringFormat='И: {0}'}" VerticalOptions="Center"
                                    Grid.Row="0" Grid.Column="3" FontSize="20"/>
+                            <Label Text="{Binding HostedGames, StringFormat='В: {0}'}" VerticalOptions="Center"
+                                   Grid.Row="0" Grid.Column="4" FontSize="20" IsVisible="{Binding CanBeHost}"/>
                             <ui:MaterialMenuButton x:Name="MoreButton" Image="icon_more.png"
                                                    BackgroundColor="Transparent"
                                                    HorizontalOptions="Start" WidthRequest="45" VerticalOptions="Center"
-                                                   Grid.Row="0" Grid.Column="4" ButtonType="Elevated" Choices="{StaticResource MoreButtonMenuItems}" MenuSelected="MoreButton_OnMenuSelected"/>
+                                                   Grid.Row="0" Grid.Column="5" ButtonType="Elevated" Choices="{StaticResource MoreButtonMenuItems}" MenuSelected="MoreButton_OnMenuSelected"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

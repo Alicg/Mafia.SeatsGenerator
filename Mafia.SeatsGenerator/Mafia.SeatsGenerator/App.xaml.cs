@@ -4,6 +4,7 @@ using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 [assembly: ExportFont("iconize-fontawesome-regular.ttf", Alias = "FA-R")]
+[assembly: ExportFont("iconize-fontawesome-solid.ttf", Alias = "FA-S")]
 
 namespace Mafia.SeatsGenerator
 {

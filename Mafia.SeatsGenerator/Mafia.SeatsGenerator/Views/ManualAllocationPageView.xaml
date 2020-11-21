@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
+             x:Class="Mafia.SeatsGenerator.Views.ManualAllocationPageView"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
+             xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
+             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
+             xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
+             mc:Ignorable="d"
+             x:Name="ContentPage">
+    <d:ContentPage.BindingContext>
+        <viewModels:ManualAllocationPageViewModel/>
+    </d:ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <converters:CanBeHostToBackgroundColorConverter x:Key="CanBeHostToBackgroundColorConverter"/>
+        <converters:IsNullConverter x:Key="IsNullConverter"/>
+        <converters:IfNullThanParameterConverter x:Key="IfNullThanParameterConverter"/>
+        <converters:FirstMultiConverter x:Key="FirstMultiConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="PlayersList" Grid.Column="1" ItemsSource="{Binding Players}" SelectionMode="None" HorizontalOptions="Center">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid HeightRequest="40">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <iconize:IconButton Text="fas-long-arrow-alt-down" FontFamily="FA-S" FontSize="18" Grid.Column="0" Clicked="ToBottom_Button_OnClicked"/>
+                                <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Grid.Column="1" FontSize="20"/>
+                                <Label Text="{Binding PlayedGames, StringFormat='И: {0}'}" VerticalOptions="Center"
+                                       Grid.Column="2" FontSize="20"/>
+                                <Label Text="{Binding HostedGames, StringFormat='В: {0}'}" VerticalOptions="Center"
+                                       Grid.Column="3" FontSize="20" IsVisible="{Binding CanBeHost}"/>
+                                <iconize:IconButton Text="fas-hand-point-right" FontFamily="FA-S" FontSize="18" Grid.Column="4" Clicked="ToGame_Button_OnClicked"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView x:Name="RoomsListView" ItemsSource="{Binding RoomsPageViewModel.SortedRoomViewModels}" Grid.Column="2"
+                      RowHeight="100" HorizontalOptions="End" SelectionMode="None" BackgroundColor="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame HeightRequest="90" WidthRequest="120" CornerRadius="40" HorizontalOptions="End" VerticalOptions="Center" Margin="5" Padding="0" BackgroundColor="IndianRed">
+                                <StackLayout Orientation="Vertical">
+                                    <Grid RowSpacing="0" 
+                                                 IsVisible="{Binding Path=Room.CurrentGame, Converter={StaticResource IsNullConverter}, ConverterParameter={x:Static converters:IsNullConverter.ModeNotNull}}"
+                                                 VerticalOptions="FillAndExpand">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="40"/>
+                                        </Grid.RowDefinitions>
+                                        <ui:MaterialButton Grid.Row="0" AllCaps="True" ButtonType="Elevated" HorizontalOptions="CenterAndExpand" FontSize="8" FontAttributes="Bold" Padding="0"
+                                                           Clicked="SetGameHost_Button_OnClicked" Margin="0" VerticalOptions="Start">
+                                            <Button.Text>
+                                                <MultiBinding Converter="{StaticResource FirstMultiConverter}" StringFormat="В:{0}">
+                                                    <Binding Path="Room.CurrentGame.Host.Player.Name"/>
+                                                    <Binding Path="Room.CurrentGame"/>
+                                                </MultiBinding>
+                                            </Button.Text>
+                                        </ui:MaterialButton>
+                                        <ui:MaterialButton Grid.Row="2" AllCaps="True" ButtonType="Elevated" HorizontalOptions="CenterAndExpand" FontSize="12" FontAttributes="Bold" 
+                                                           Padding="0" Clicked="MoveToGame_Button_OnClicked" Margin="0" VerticalOptions="End">
+                                            <Button.Text>
+                                                <MultiBinding Converter="{StaticResource FirstMultiConverter}">
+                                                    <Binding Path="Room.CurrentGame.Members.Count" StringFormat="И: {0}/10" />
+                                                    <Binding Path="Room.CurrentGame"/>
+                                                </MultiBinding>
+                                            </Button.Text>
+                                        </ui:MaterialButton>
+                                        <StackLayout Grid.Row="0" Grid.RowSpan="3" Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Label Text="{Binding Room.RoomNumber, StringFormat='Стол {0}'}" FontSize="17" TextColor="White" 
+                                                   HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" 
+                                                   Margin="0" Padding="0"/>
+                                            <iconize:IconButton Text="fas-external-link-square-alt" FontFamily="FA-S" FontSize="23" Padding="0" 
+                                                                WidthRequest="28" HeightRequest="30" VerticalOptions="Center" TextColor="DodgerBlue"
+                                                                Command="{Binding Source={x:Reference ContentPage}, Path=BindingContext.NavigateToRoomCommand}"
+                                                                CommandParameter="{Binding}"/>
+                                        </StackLayout>
+                                    </Grid>
+                                    <StackLayout Orientation="Vertical" IsVisible="{Binding Room.CurrentGame, Converter={StaticResource IsNullConverter}}" Spacing="0">
+                                        <Label Text="{Binding Room.RoomNumber, StringFormat='Стол {0}'}" FontSize="17" TextColor="White" 
+                                               HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" 
+                                               Margin="0" Padding="0"/>
+                                        <ui:MaterialButton Text="Новая игра" FontSize="12" Padding="0" Margin="0"
+                                                           Command="{Binding Source={x:Reference ContentPage}, Path=BindingContext.CreateNewGameCommand}"
+                                                           CommandParameter="{Binding}" VerticalOptions="CenterAndExpand"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

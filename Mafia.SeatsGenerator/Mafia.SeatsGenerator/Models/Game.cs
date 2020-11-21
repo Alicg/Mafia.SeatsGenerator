@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using SQLite;
 using Xamarin.Forms;
 
@@ -57,6 +58,37 @@ namespace Mafia.SeatsGenerator.Models
                 this.isStopped = value;
                 this.OnPropertyChanged(nameof(this.IsStopped));
             }
+        }
+
+        public void AddPlayers(IEnumerable<Player> players)
+        {
+            foreach (var player in players)
+            {
+                this.AddPlayer(player);
+            }
+        }
+
+        public void AddPlayer(Player player)
+        {
+            this.Members.Add(new PlayerInGame(player, this));
+            player.PlayedGames++;
+            if (!this.isStopped)
+            {
+                player.IsBusy = true;
+            }
+        }
+
+        public void SetHost(Player newHost)
+        {
+            if (this.Host != null)
+            {
+                this.Host.Player.IsBusy = false;
+                this.Host.Player.HostedGames--;
+            }
+
+            this.Host = new PlayerInGame(newHost, this);
+            newHost.IsBusy = true;
+            newHost.HostedGames++;
         }
     }
 }

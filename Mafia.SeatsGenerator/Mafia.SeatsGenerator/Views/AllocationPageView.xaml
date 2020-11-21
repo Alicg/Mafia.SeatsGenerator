@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<utils:STabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
+             xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
+             x:Class="Mafia.SeatsGenerator.Views.AllocationPageView"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
+             mc:Ignorable="d"
+             TabBarHeight="35" LargeLastCell="False"
+             CurrentPageChanged="AllocationPageView_OnCurrentPageChanged">
+    <utils:STabbedPage.TabBarCellTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="ForestGreen">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1"/>
+            </Grid>
+        </DataTemplate>
+    </utils:STabbedPage.TabBarCellTemplate>
+    <utils:STabbedPage.TabBarSelectedCellTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="LightGreen">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="2"/>
+                </Grid.RowDefinitions>
+                <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" Grid.Row="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1"/>
+                <BoxView Color="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+            </Grid>
+        </DataTemplate>
+    </utils:STabbedPage.TabBarSelectedCellTemplate>
+    <d:TabbedPage.BindingContext>
+        <viewModels:AllocationPageViewModel/>
+    </d:TabbedPage.BindingContext>
+    <views:ManualAllocationPageView Title="Вручную" BindingContext="{Binding ManualAllocationPageViewModel}"/>
+    <views:RoomsPageView Title="Столы" BindingContext="{Binding RoomsPageViewModel}"/>
+</utils:STabbedPage>

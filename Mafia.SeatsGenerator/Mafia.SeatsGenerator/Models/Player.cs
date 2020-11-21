@@ -6,9 +6,10 @@ namespace Mafia.SeatsGenerator.Models
     {
         private string _name;
         private int _number;
-        private double priorityPoints;
+        private double playedGames;
         private bool isBusy;
         private bool canBeHost;
+        private double hostedGames;
 
         public string Name
         {
@@ -52,13 +53,23 @@ namespace Mafia.SeatsGenerator.Models
             }
         }
 
-        public double PriorityPoints
+        public double PlayedGames
         {
-            get => this.priorityPoints;
+            get => this.playedGames;
             set
             {
-                this.priorityPoints = value;
-                this.OnPropertyChanged(nameof(this.PriorityPoints));
+                this.playedGames = value;
+                this.OnPropertyChanged(nameof(this.PlayedGames));
+            }
+        }
+
+        public double HostedGames
+        {
+            get => this.hostedGames;
+            set
+            {
+                this.hostedGames = value;
+                this.OnPropertyChanged(nameof(this.HostedGames));
             }
         }
 
@@ -66,17 +77,17 @@ namespace Mafia.SeatsGenerator.Models
         {
             if (firstKilled)
             {
-                this.PriorityPoints -= 0.5;
+                this.PlayedGames -= 0.5;
             }
             else
             {
-                this.PriorityPoints -= 1;
+                this.PlayedGames -= 1;
             }
         }
 
         public override string ToString()
         {
-            return $"{this.Name}; Игр:{this.PriorityPoints}";
+            return $"{this.Name}; Игр:{this.PlayedGames}";
         }
     }
 }

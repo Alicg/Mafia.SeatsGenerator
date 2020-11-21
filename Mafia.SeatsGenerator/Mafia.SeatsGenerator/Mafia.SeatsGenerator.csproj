@@ -16,7 +16,7 @@
         <PackageReference Include="System.Reactive" Version="4.4.1" />
         <PackageReference Include="System.Reactive.Core" Version="4.4.1" />
         <PackageReference Include="System.Reactive.Linq" Version="4.4.1" />
-        <PackageReference Include="Xam.Plugin.Iconize.FontAwesome" Version="3.5.0.129" />
+        <PackageReference Include="Xam.Plugin.Iconize.FontAwesome" Version="3.5.0.123" />
         <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />
         <PackageReference Include="XF.Material" Version="1.7.5" />
     </ItemGroup>

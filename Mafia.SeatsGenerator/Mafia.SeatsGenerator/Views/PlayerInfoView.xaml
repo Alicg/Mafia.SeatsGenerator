@@ -38,5 +38,5 @@
                 Grid.Row="2" Grid.Column="1"/>
       <Label Text="Игр:" VerticalOptions="Center" FontSize="24"
              Grid.Row="3" Grid.Column="0"/>
-      <Entry Text="{Binding PriorityPoints}" Keyboard="Numeric" Grid.Row="3" Grid.Column="1" HorizontalTextAlignment="Center"/>
+      <Entry Text="{Binding PlayedGames}" Keyboard="Numeric" Grid.Row="3" Grid.Column="1" HorizontalTextAlignment="Center"/>
 </Grid>

@@ -1,27 +1,32 @@
-﻿using System;
-using DynamicData.Binding;
+﻿using DynamicData.Binding;
+using Mafia.SeatsGenerator.Utils;
 using Mafia.SeatsGenerator.ViewModels;
+using System;
+using System.Reactive.Linq;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Xamarin.Forms.Xaml;
-using STabbedPage = Mafia.SeatsGenerator.Utils.STabbedPage;
 
 namespace Mafia.SeatsGenerator.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class RoomsPageView : STabbedPage
+    public partial class AllocationPageView : STabbedPage
     {
-        public RoomsPageView()
+        public AllocationPageView()
         {
             InitializeComponent();
+            
+            this.On<Android>().SetIsSwipePagingEnabled(false);
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (this.BindingContext is RoomsPageViewModel vm)
+            if (this.BindingContext is AllocationPageViewModel vm)
             {
-                vm.WhenPropertyChanged(v => v.SelectedRoomPage).Subscribe(v =>
+                vm.WhenPropertyChanged(v => v.SelectedPage).Subscribe(v =>
                 {
                     foreach (var childPage in this.Children)
                     {
@@ -35,11 +40,11 @@ namespace Mafia.SeatsGenerator.Views
             }
         }
 
-        private void RoomsPageView_OnCurrentPageChanged(object sender, EventArgs e)
+        private void AllocationPageView_OnCurrentPageChanged(object sender, EventArgs e)
         {
-            if (this.BindingContext is RoomsPageViewModel vm)
+            if (this.BindingContext is AllocationPageViewModel vm)
             {
-                vm.SelectedRoomPage = this.CurrentPage?.BindingContext as BindableObject;
+                vm.SelectedPage = this.CurrentPage?.BindingContext as BindableObject;
             }
         }
     }
