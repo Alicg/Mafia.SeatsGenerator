@@ -72,6 +72,8 @@ namespace Mafia.SeatsGenerator.Models
                 this.OnPropertyChanged(nameof(this.HostedGames));
             }
         }
+        
+        public int SortingValue { get; set; }
 
         public void DecreasePriority(bool firstKilled)
         {

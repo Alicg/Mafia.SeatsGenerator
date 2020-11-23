@@ -4,18 +4,25 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows.Input;
 using DynamicData;
 using DynamicData.Binding;
 using Mafia.SeatsGenerator.Models;
 using Mafia.SeatsGenerator.Utils;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace Mafia.SeatsGenerator.ViewModels
 {
     public class ManualAllocationPageViewModel : BindableObject
     {
         private readonly SourceList<Player> playersToAllocate = new SourceList<Player>();
+        
+        private readonly Subject<IComparer<Player>> sortChangesObservable = new Subject<IComparer<Player>>();
+        private readonly SortExpressionComparer<Player> byGamesComparer = SortExpressionComparer<Player>.Ascending(p => p.PlayedGames);
+        private readonly SortExpressionComparer<Player> byHostComparer = SortExpressionComparer<Player>.Descending(p => p.HostedGames);
+        private readonly SortExpressionComparer<Player> bySortingValueComparer = SortExpressionComparer<Player>.Ascending(p => p.SortingValue);
         
         public ManualAllocationPageViewModel(PlayersSetupPageViewModel playersSetupPageViewModel, RoomsPageViewModel roomsPageViewModel)
         {
@@ -39,7 +46,7 @@ namespace Mafia.SeatsGenerator.ViewModels
                     this.playersToAllocate.RemoveMany(v.EventArgs.OldItems.Cast<Player>());
                 }
             });
-            this.playersToAllocate.Connect().Bind(out var players).Subscribe();
+            this.playersToAllocate.Connect().Sort(this.byGamesComparer, comparerChanged: this.sortChangesObservable).Bind(out var players).Subscribe();
             this.Players = players;
         }
 
@@ -58,13 +65,16 @@ namespace Mafia.SeatsGenerator.ViewModels
         public ICommand SetGameHostCommand => new Command<SetGameHostObject>(this.SetGameHost);
         
         public ICommand NavigateToRoomCommand => new Command<RoomPageViewModel>(this.OnNavigateToRoomPage);
+        
+        public ICommand SortByCommand => new Command<string>(this.SortBy);
 
         public event EventHandler<RoomPageViewModel> NavigateToRoomPage; 
 
         private void MoveToBottom(Player player)
         {
-            var currentIndex = this.playersToAllocate.Items.IndexOf(player);
-            this.playersToAllocate.Move(currentIndex, this.playersToAllocate.Count - 1);
+            var maxSortingValue = this.playersToAllocate.Items.Max(v => v.SortingValue);
+            player.SortingValue = maxSortingValue + 1;
+            this.sortChangesObservable.OnNext(this.bySortingValueComparer);
         }
 
         private void CreateNewGame(RoomPageViewModel roomPageViewModel)
@@ -87,9 +97,10 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void SetGameHost(SetGameHostObject setGameHostObject)
         {
-            var firstHost = setGameHostObject.Players.FirstOrDefault(v => v.CanBeHost);
+            var firstHost = setGameHostObject.Players.FirstOrDefault();
             if (firstHost != null)
             {
+                firstHost.CanBeHost = true;
                 setGameHostObject.Game.SetHost(firstHost);
             }
         }
@@ -115,6 +126,24 @@ namespace Mafia.SeatsGenerator.ViewModels
             }
         }
 
+        private void SortBy(string column)
+        {
+            this.playersToAllocate.Items.ForEach(v => v.SortingValue = 0);
+            switch (column)
+            {
+                case "games":
+                {
+                    this.sortChangesObservable.OnNext(this.byGamesComparer);
+                    break;
+                }
+                case "host":
+                {
+                    this.sortChangesObservable.OnNext(this.byHostComparer);
+                    break;
+                }
+            }
+        }
+
         protected virtual void OnNavigateToRoomPage(RoomPageViewModel e)
         {
             this.NavigateToRoomPage?.Invoke(this, e);
@@ -132,6 +161,12 @@ namespace Mafia.SeatsGenerator.ViewModels
             public IEnumerable<Player> Players { get; set; }
             
             public Game Game { get; set; }
+        }
+        
+        private enum SortingColumn
+        {
+            ByPlayedGames = 1,
+            ByCanBeHost = 2
         }
     }
 }

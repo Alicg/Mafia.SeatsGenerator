@@ -6,7 +6,6 @@
              x:Class="Mafia.SeatsGenerator.Views.ManualAllocationPageView"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
              xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
              xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              xmlns:ui="clr-namespace:XF.Material.Forms.UI;assembly=XF.Material"
@@ -23,12 +22,26 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="PlayersList" Grid.Column="1" ItemsSource="{Binding Players}" SelectionMode="None" HorizontalOptions="Center">
+            <iconize:IconLabel Grid.Column="0" Grid.ColumnSpan="2" Text="fas-sort-numeric-down" FontFamily="FA-S" Margin="10,10,0,0" WidthRequest="30" HeightRequest="30" FontSize="25" FontAttributes="Bold" 
+                               VerticalOptions="Center"/>
+            <iconize:IconLabel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text=":" FontFamily="FA-S" Margin="35,7,0,0" WidthRequest="10" HeightRequest="30" FontSize="25" FontAttributes="Bold" 
+                               VerticalOptions="Center"/>
+            <iconize:IconButton x:Name="SortByHostBtn" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="fas-bold" FontFamily="FA-S" WidthRequest="30" HeightRequest="30" FontSize="18" TextColor="Gold" 
+                                HorizontalOptions="Start" VerticalOptions="Center"
+                                Command="{Binding SortByCommand}" CommandParameter="host" BackgroundColor="BlueViolet" BorderWidth="3" Padding="0" Margin="50,10,0,0"
+                                Clicked="SortButton_OnClicked"/>
+            <iconize:IconButton x:Name="SortByGamesBtn" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="И" WidthRequest="30" HeightRequest="30" FontSize="22" HorizontalOptions="Start"
+                                Command="{Binding SortByCommand}" CommandParameter="games" BackgroundColor="BlueViolet" BorderWidth="3" Padding="0" Margin="100,10,0,0" TextColor="White"
+                                Clicked="SortButton_OnClicked"/>
+            <ListView x:Name="PlayersList" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Players}" SelectionMode="None" HorizontalOptions="Center" VerticalOptions="Center">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -38,21 +51,22 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
                                 <iconize:IconButton Text="fas-long-arrow-alt-down" FontFamily="FA-S" FontSize="18" Grid.Column="0" Clicked="ToBottom_Button_OnClicked"/>
-                                <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Grid.Column="1" FontSize="20"/>
+                                <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Grid.Column="1" FontSize="17"/>
                                 <Label Text="{Binding PlayedGames, StringFormat='И: {0}'}" VerticalOptions="Center"
                                        Grid.Column="2" FontSize="20"/>
                                 <Label Text="{Binding HostedGames, StringFormat='В: {0}'}" VerticalOptions="Center"
                                        Grid.Column="3" FontSize="20" IsVisible="{Binding CanBeHost}"/>
-                                <iconize:IconButton Text="fas-hand-point-right" FontFamily="FA-S" FontSize="18" Grid.Column="4" Clicked="ToGame_Button_OnClicked"/>
+                                <iconize:IconButton Text="fas-hand-point-right" FontFamily="FA-S" FontSize="18" Grid.Column="5" Clicked="ToGame_Button_OnClicked"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <ListView x:Name="RoomsListView" ItemsSource="{Binding RoomsPageViewModel.SortedRoomViewModels}" Grid.Column="2"
+            <ListView x:Name="RoomsListView" ItemsSource="{Binding RoomsPageViewModel.SortedRoomViewModels}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
                       RowHeight="100" HorizontalOptions="End" SelectionMode="None" BackgroundColor="Transparent">
                 <ListView.ItemTemplate>
                     <DataTemplate>

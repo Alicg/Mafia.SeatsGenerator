@@ -61,6 +61,8 @@ namespace Mafia.SeatsGenerator.Views
                 {
                     vm.MoveToBottomCommand.Execute(player);
                 }
+
+                this.SortByGamesBtn.BorderColor = this.SortByHostBtn.BorderColor = Color.BlueViolet;
             }
         }
 
@@ -103,6 +105,25 @@ namespace Mafia.SeatsGenerator.Views
             foreach (var grid in this.playerGridsSelected.ToArray())
             {
                 this.UnselectPlayerGrid(grid);
+            }
+        }
+
+        private void SortButton_OnClicked(object sender, EventArgs e)
+        {
+            this.RevertSortButtonColor(sender as IconButton);
+        }
+
+        private void RevertSortButtonColor(IconButton iconButton)
+        {
+            if (iconButton.BorderColor == Color.Blue)
+            {
+                iconButton.BorderColor = Color.BlueViolet;
+            }
+            else
+            {
+                this.SortByHostBtn.BorderColor = Color.BlueViolet;
+                this.SortByGamesBtn.BorderColor = Color.BlueViolet;
+                iconButton.BorderColor = Color.Blue;
             }
         }
     }
