@@ -23,5 +23,9 @@ namespace Mafia.SeatsGenerator.Android
             XF.Material.Droid.Material.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
+
+        public override void OnBackPressed()
+        {
+        }
     }
 }
