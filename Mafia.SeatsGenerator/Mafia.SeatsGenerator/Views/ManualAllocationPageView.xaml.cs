@@ -43,13 +43,21 @@ namespace Mafia.SeatsGenerator.Views
         private void SelectPlayerGrid(Grid grid)
         {
             this.playerGridsSelected.Add(grid);
-            grid?.Children.OfType<Label>().ForEach(v => v.FontAttributes = FontAttributes.Bold);
+            grid?.Children.OfType<Label>().ForEach(v =>
+            {
+                v.FontAttributes = FontAttributes.Bold;
+                v.TextColor = Color.Blue;
+            });
         }
 
         private void UnselectPlayerGrid(Grid grid)
         {
             this.playerGridsSelected.Remove(grid);
-            grid?.Children.OfType<Label>().ForEach(v => v.FontAttributes = FontAttributes.None);
+            grid?.Children.OfType<Label>().ForEach(v =>
+            {
+                v.FontAttributes = FontAttributes.None;
+                v.TextColor = Color.Black;
+            });
         }
 
         private void ToBottom_Button_OnClicked(object sender, EventArgs e)

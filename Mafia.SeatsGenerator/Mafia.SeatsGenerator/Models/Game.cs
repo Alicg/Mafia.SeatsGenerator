@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using DynamicData;
 using SQLite;
 using Xamarin.Forms;
 
@@ -60,15 +63,44 @@ namespace Mafia.SeatsGenerator.Models
             }
         }
 
+        public int SlotsOccupied => this.Members.Count(v => v.Player != Player.EmptyPlayer);
+
         public void AddPlayers(IEnumerable<Player> players)
         {
             foreach (var player in players)
             {
                 this.AddPlayer(player);
             }
+            this.OnPropertyChanged(nameof(this.SlotsOccupied));
         }
 
-        public void AddPlayer(Player player)
+        public void ReplacePlayers(PlayerInGame from, Player to)
+        {
+            if (this.FirstKilled == from)
+            {
+                // снимаем признак ПУ если он стоит на игроке.
+                this.SetFirstKilled(from);
+            }
+
+            try
+            {
+                this.Members.Replace(from, new PlayerInGame(to, this));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
+            from.Player.PlayedGames -= 1;
+            from.Player.IsBusy = false;
+            
+            to.PlayedGames += 1;
+            to.IsBusy = true;
+            
+            this.OnPropertyChanged(nameof(this.SlotsOccupied));
+        }
+
+        private void AddPlayer(Player player)
         {
             this.Members.Add(new PlayerInGame(player, this));
             player.PlayedGames++;
@@ -89,6 +121,22 @@ namespace Mafia.SeatsGenerator.Models
             this.Host = new PlayerInGame(newHost, this);
             newHost.IsBusy = true;
             newHost.HostedGames++;
+        }
+
+        public void SetFirstKilled(PlayerInGame p)
+        {
+            if (p.Game.FirstKilled != null)
+            {
+                p.Game.FirstKilled.Player.PlayedGames += 0.5;
+            }
+
+            if (p.Game.FirstKilled == p)
+            {
+                p.Game.FirstKilled = null;
+                return;
+            }
+            p.Game.FirstKilled = p;
+            p.Game.FirstKilled.Player.PlayedGames -= 0.5;
         }
     }
 }

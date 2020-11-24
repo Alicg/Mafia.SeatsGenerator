@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace Mafia.SeatsGenerator.Models
 {
@@ -86,6 +87,8 @@ namespace Mafia.SeatsGenerator.Models
                 this.PlayedGames -= 1;
             }
         }
+
+        public static Player EmptyPlayer = new Player {Name = "Пусто", PlayedGames = 100000};
 
         public override string ToString()
         {

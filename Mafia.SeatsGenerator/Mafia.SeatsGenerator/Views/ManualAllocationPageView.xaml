@@ -49,17 +49,17 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
                                 <iconize:IconButton Text="fas-long-arrow-alt-down" FontFamily="FA-S" FontSize="18" Grid.Column="0" Clicked="ToBottom_Button_OnClicked"/>
-                                <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Grid.Column="1" FontSize="17"/>
-                                <Label Text="{Binding PlayedGames, StringFormat='И: {0}'}" VerticalOptions="Center"
-                                       Grid.Column="2" FontSize="20"/>
-                                <Label Text="{Binding HostedGames, StringFormat='В: {0}'}" VerticalOptions="Center"
-                                       Grid.Column="3" FontSize="20" IsVisible="{Binding CanBeHost}"/>
+                                <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Grid.Column="1" FontSize="17" TextColor="Black"/>
+                                <Label Text="{Binding PlayedGames, StringFormat='И: {0}'}" VerticalOptions="Center" TextColor="Black"
+                                       Grid.Column="3" FontSize="20"/>
+                                <Label Text="{Binding HostedGames, StringFormat='В: {0}'}" VerticalOptions="Center" TextColor="Black"
+                                       Grid.Column="4" FontSize="20" IsVisible="{Binding CanBeHost}"/>
                                 <iconize:IconButton Text="fas-hand-point-right" FontFamily="FA-S" FontSize="18" Grid.Column="5" Clicked="ToGame_Button_OnClicked"/>
                             </Grid>
                         </ViewCell>
@@ -94,7 +94,7 @@
                                                            Padding="0" Clicked="MoveToGame_Button_OnClicked" Margin="0" VerticalOptions="End">
                                             <Button.Text>
                                                 <MultiBinding Converter="{StaticResource FirstMultiConverter}">
-                                                    <Binding Path="Room.CurrentGame.Members.Count" StringFormat="И: {0}/10" />
+                                                    <Binding Path="Room.CurrentGame.SlotsOccupied" StringFormat="И: {0}/10" />
                                                     <Binding Path="Room.CurrentGame"/>
                                                 </MultiBinding>
                                             </Button.Text>

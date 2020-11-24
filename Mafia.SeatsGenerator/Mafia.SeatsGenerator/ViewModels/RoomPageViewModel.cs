@@ -5,6 +5,7 @@ using System.Windows.Input;
 using DynamicData;
 using Mafia.SeatsGenerator.Models;
 using Mafia.SeatsGenerator.Services;
+using SQLite;
 using Xamarin.Forms;
 
 namespace Mafia.SeatsGenerator.ViewModels
@@ -28,6 +29,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         public ICommand GenerateNewGameCommand => new Command(this.GenerateNewGame);
         public ICommand RemoveGameCommand => new Command<Game>(this.RemoveGame);
+        public ICommand DeleteFromGameCommand => new Command<PlayerInGame>(this.DeletePlayerFromGame);
         public ICommand FirstKilledCommand => new Command<PlayerInGame>(this.SetFirstKilled);
         public ICommand StopGameCommand => new Command<Game>(this.StopGame);
         public ICommand ResumeGameCommand => new Command<Game>(this.StartGame);
@@ -46,22 +48,17 @@ namespace Mafia.SeatsGenerator.ViewModels
         {
             var newGame = new Game();
             this.AddGame(newGame);
+            newGame.AddPlayers(Enumerable.Repeat(Player.EmptyPlayer, 10));
         }
         
         private void SetFirstKilled(PlayerInGame p)
         {
-            if (p.Game.FirstKilled != null)
-            {
-                p.Game.FirstKilled.Player.PlayedGames += 0.5;
-            }
+            p.Game.SetFirstKilled(p);
+        }
 
-            if (p.Game.FirstKilled == p)
-            {
-                p.Game.FirstKilled = null;
-                return;
-            }
-            p.Game.FirstKilled = p;
-            p.Game.FirstKilled.Player.PlayedGames -= 0.5;
+        private void DeletePlayerFromGame(PlayerInGame p)
+        {
+            p.Game.ReplacePlayers(p, Player.EmptyPlayer);
         }
 
         private void GenerateNewGame()
@@ -107,7 +104,11 @@ namespace Mafia.SeatsGenerator.ViewModels
             }
             
             this.Room.Games.Remove(game);
-            
+
+            if (game.Host != null)
+            {
+                game.Host.Player.HostedGames--;
+            }
             foreach (var player in game.Members)
             {
                 player.Player.DecreasePriority(game.FirstKilled == player);
@@ -132,7 +133,11 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private IEnumerable<Player> GetNewSetOfPlayers(Player host)
         {
-            var sortedPlayers = this.playersSetupPageViewModel.Players.Where(v => !v.IsBusy).Except(new[] {host}).OrderBy(v => v.IsVip).ThenBy(v => v.PlayedGames).Take(10);
+            var sortedPlayers = this.playersSetupPageViewModel.Players.Where(v => !v.IsBusy).Except(new[] {host}).OrderBy(v => v.IsVip).ThenBy(v => v.PlayedGames).Take(10).ToList();
+            if (sortedPlayers.Count < 10)
+            {
+                sortedPlayers.AddRange(Enumerable.Repeat(Player.EmptyPlayer, 10 - sortedPlayers.Count));
+            }
             return sortedPlayers.OrderBy(v => this.randomGenerator.Next(0, 9));
         }
 
@@ -199,29 +204,12 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private async void ChangePlayer(PlayerInGame playerInGame)
         {
-            if (playerInGame.Game.FirstKilled == playerInGame)
-            {
-                // снимаем признак ПУ если он стоит на игроке.
-                this.SetFirstKilled(playerInGame);
-            }
-            
             var possiblePlayers = this.playersSetupPageViewModel.Players.Where(v => !v.IsBusy && v != playerInGame.Player).OrderBy(v => v.PlayedGames).ToList();
-
             var newPlayer = await this.popupService.SelectChoicePopup(possiblePlayers, "Выберите нового игрока");
+            
             if (newPlayer != null)
             {
-                var currentSeat = playerInGame.Game.Members.IndexOf(playerInGame);
-                if (currentSeat != -1)
-                {
-                    playerInGame.Game.Members.RemoveAt(currentSeat);
-                    playerInGame.Game.Members.Insert(currentSeat, new PlayerInGame(newPlayer, playerInGame.Game));
-
-                    playerInGame.Player.PlayedGames -= 1;
-                    playerInGame.Player.IsBusy = false;
-                    
-                    newPlayer.PlayedGames += 1;
-                    newPlayer.IsBusy = true;
-                }
+                playerInGame.Game.ReplacePlayers(playerInGame, newPlayer);
             }
         }
     }

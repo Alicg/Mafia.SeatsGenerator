@@ -17,6 +17,7 @@ namespace Mafia.SeatsGenerator.ViewModels
 {
     public class ManualAllocationPageViewModel : BindableObject
     {
+        private readonly Random randomGenerator = new Random();
         private readonly SourceList<Player> playersToAllocate = new SourceList<Player>();
         
         private readonly Subject<IComparer<Player>> sortChangesObservable = new Subject<IComparer<Player>>();
@@ -88,11 +89,15 @@ namespace Mafia.SeatsGenerator.ViewModels
             var slotsToFree = playersToAdd.Players.Count() - freeSlots;
             if (slotsToFree > 0)
             {
-                var maxPlayedPlayers = playersToAdd.Game.Members.OrderBy(v => v.Player.PlayedGames).TakeLast(slotsToFree);
-                playersToAdd.Game.Members.Remove(maxPlayedPlayers);
+                var maxPlayedPlayers = playersToAdd.Game.Members.OrderBy(v => v.Player.PlayedGames).ThenBy(v => this.randomGenerator.Next(0, 9)).TakeLast(slotsToFree).ToList();
+                var playersToAddList = playersToAdd.Players.ToList();
+                for (var index = 0; index < maxPlayedPlayers.Count; index++)
+                {
+                    var maxPlayedPlayer = maxPlayedPlayers[index];
+                    var playerToAdd = playersToAddList[index];
+                    playersToAdd.Game.ReplacePlayers(maxPlayedPlayer, playerToAdd);
+                }
             }
-
-            playersToAdd.Game.AddPlayers(playersToAdd.Players);
         }
 
         private void SetGameHost(SetGameHostObject setGameHostObject)
