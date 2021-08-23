@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Mafia.SeatsGenerator.Models;
 using Mafia.SeatsGenerator.ViewModels;
-using Plugin.Iconize;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using XF.Material.Forms.UI;
@@ -66,7 +65,7 @@ namespace Mafia.SeatsGenerator.Views
 
         private async void Button_OnClicked(object sender, EventArgs e)
         {
-            if (sender is IconButton button)
+            if (sender is Button button)
             {
                 var player = button.BindingContext as Player;
                 if (player == null || string.IsNullOrEmpty(player.Name) || player.Name.Length <= 1)

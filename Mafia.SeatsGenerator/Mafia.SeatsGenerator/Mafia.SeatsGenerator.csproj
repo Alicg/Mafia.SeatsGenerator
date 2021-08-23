@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DebugType>pdbonly</DebugType>
+        <DebugType>portable</DebugType>
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
@@ -17,14 +18,19 @@
         <PackageReference Include="System.Reactive" Version="4.4.1" />
         <PackageReference Include="System.Reactive.Core" Version="4.4.1" />
         <PackageReference Include="System.Reactive.Linq" Version="4.4.1" />
-        <PackageReference Include="Xam.Plugin.Iconize.FontAwesome" Version="3.5.0.123" />
         <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />
         <PackageReference Include="XF.Material" Version="1.7.5" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="IconFonts\fa-regular.otf" />
       <EmbeddedResource Include="IconFonts\iconize-fontawesome-regular.ttf" />
       <None Remove="IconFonts\iconize-fontawesome-solid.ttf" />
       <EmbeddedResource Include="IconFonts\iconize-fontawesome-solid.ttf" />
+      <None Remove="IconFonts\fa-brands.otf" />
+      <None Remove="IconFonts\fa-regular.otf" />
+      <EmbeddedResource Include="IconFonts\fa-brands.otf" />
+      <None Remove="IconFonts\fa-solid.otf" />
+      <EmbeddedResource Include="IconFonts\fa-solid.otf" />
     </ItemGroup>
 </Project>

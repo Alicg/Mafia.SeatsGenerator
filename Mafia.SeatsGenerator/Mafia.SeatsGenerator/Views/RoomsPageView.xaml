@@ -5,7 +5,6 @@
              xmlns:views="clr-namespace:Mafia.SeatsGenerator.Views;assembly=Mafia.SeatsGenerator"
              xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
              x:Class="Mafia.SeatsGenerator.Views.RoomsPageView"
-             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
              xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -28,27 +27,27 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <iconize:IconButton Text="far-times-circle" 
-                                    FontFamily="FA-R" FontSize="24" TextColor="Red" BackgroundColor="Transparent"
-                                    HorizontalOptions="Start" VerticalOptions="Start" Padding="0"
-                                    Grid.Column="0" WidthRequest="30"
-                                    Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.RemoveRoomCommand}" CommandParameter="{Binding}"/>
+                <Button Text="&#xf057;"
+                        FontFamily="FA-S" FontSize="24" TextColor="Red" BackgroundColor="Transparent"
+                        HorizontalOptions="Start" VerticalOptions="Start" Padding="0"
+                        Grid.Column="0" WidthRequest="30"
+                        Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.RemoveRoomCommand}" CommandParameter="{Binding}"/>
                 <Label Text="{Binding Room.RoomNumber}" FontSize="14"
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center"
                        Grid.Column="1"/>
-                <iconize:IconButton Text="far-plus-square" 
-                                    FontFamily="FA-R" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
-                                    HorizontalOptions="Start" WidthRequest="30" VerticalOptions="Center" Padding="0"
-                                    Grid.Column="2" Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.AddRoomCommand}">
-                    <iconize:IconButton.IsVisible>
+                <Button Text="&#xf0fe;"
+                        FontFamily="FA-S" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
+                        HorizontalOptions="Start" WidthRequest="30" VerticalOptions="Center" Padding="0"
+                        Grid.Column="2" Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.AddRoomCommand}">
+                    <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource IsLastCollectionElementConverter}">
                             <Binding Source="{x:Reference Name=STabbedPage}" Path="BindingContext.SortedRoomViewModels"/>
                             <Binding/>
                             <Binding Source="{x:Reference Name=STabbedPage}" Path="SelectedItem"/>
                         </MultiBinding>
-                    </iconize:IconButton.IsVisible>
-                </iconize:IconButton>
+                    </Button.IsVisible>
+                </Button>
             </Grid>
         </DataTemplate>
     </utils:STabbedPage.TabBarCellTemplate>
@@ -65,19 +64,19 @@
                        VerticalTextAlignment="Center"
                        TextColor="White"
                        Grid.Column="0" Grid.ColumnSpan="2"/>
-                <iconize:IconButton Text="far-plus-square" 
-                                    FontFamily="FA-R" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
-                                    HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" Padding="0"
-                                    Grid.Column="1" 
-                                    Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.AddRoomCommand}">
-                    <iconize:IconButton.IsVisible>
+                <Button Text="&#xf0fe;"
+                        FontFamily="FA-S" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
+                        HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" Padding="0"
+                        Grid.Column="1"
+                        Command="{Binding Source={x:Reference Name=STabbedPage}, Path=BindingContext.AddRoomCommand}">
+                    <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource IsLastCollectionElementConverter}">
                             <Binding Source="{x:Reference Name=STabbedPage}" Path="BindingContext.SortedRoomViewModels"/>
                             <Binding/>
                             <Binding Source="{x:Reference Name=STabbedPage}" Path="SelectedItem"/>
                         </MultiBinding>
-                    </iconize:IconButton.IsVisible>
-                </iconize:IconButton>
+                    </Button.IsVisible>
+                </Button>
             </Grid>
         </DataTemplate>
     </utils:STabbedPage.TabBarSelectedCellTemplate>

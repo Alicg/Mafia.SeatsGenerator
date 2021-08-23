@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Mafia.SeatsGenerator.Models;
 using Mafia.SeatsGenerator.ViewModels;
-using Plugin.Iconize;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
@@ -118,10 +117,10 @@ namespace Mafia.SeatsGenerator.Views
 
         private void SortButton_OnClicked(object sender, EventArgs e)
         {
-            this.RevertSortButtonColor(sender as IconButton);
+            this.RevertSortButtonColor(sender as Button);
         }
 
-        private void RevertSortButtonColor(IconButton iconButton)
+        private void RevertSortButtonColor(Button iconButton)
         {
             if (iconButton.BorderColor == Color.Blue)
             {

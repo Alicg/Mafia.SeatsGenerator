@@ -7,7 +7,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
              xmlns:models="clr-namespace:Mafia.SeatsGenerator.Models;assembly=Mafia.SeatsGenerator"
-             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              xmlns:converters="clr-namespace:Mafia.SeatsGenerator.Utils.Converters;assembly=Mafia.SeatsGenerator"
              xmlns:effects="clr-namespace:Mafia.SeatsGenerator.Utils.Effects;assembly=Mafia.SeatsGenerator"
              xmlns:utils="clr-namespace:Mafia.SeatsGenerator.Utils;assembly=Mafia.SeatsGenerator"
@@ -32,7 +31,7 @@
                 <FlexLayout BindableLayout.ItemsSource="{Binding Room.BindingListOfGames}" Wrap="Wrap" AlignItems="Start" AlignContent="Start">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Frame FlexLayout.Grow="1" BackgroundColor="{Binding GameColor}" Opacity="{Binding IsStopped, Converter={StaticResource GameIsStoppedToOpacityConverter}}" HorizontalOptions="FillAndExpand">
+                            <Frame FlexLayout.Grow="1" Padding="10" BackgroundColor="{Binding GameColor}" Opacity="{Binding IsStopped, Converter={StaticResource GameIsStoppedToOpacityConverter}}" HorizontalOptions="FillAndExpand">
                                 <d:Frame.BindingContext>
                                     <models:Game/>
                                 </d:Frame.BindingContext>
@@ -69,38 +68,38 @@
                                                                 </MultiBinding>
                                                             </Label.Text>
                                                         </Label>
-                                                        <iconize:IconLabel Text="far-times-circle" FontFamily="FA-R" TextColor="Red" FontSize="14" VerticalOptions="Center">
-                                                            <iconize:IconLabel.IsVisible>
+                                                        <Label Text="&#x2620;" FontFamily="FA-S" TextColor="Red" FontSize="14" VerticalOptions="Center">
+                                                            <Label.IsVisible>
                                                                 <MultiBinding Converter="{StaticResource FirstKilledToBoolConverter}">
                                                                     <MultiBinding.Bindings>
                                                                         <Binding/>
                                                                         <Binding Path="Game.FirstKilled"/>
                                                                     </MultiBinding.Bindings>
                                                                 </MultiBinding>
-                                                            </iconize:IconLabel.IsVisible>
-                                                        </iconize:IconLabel>
+                                                            </Label.IsVisible>
+                                                        </Label>
                                                     </StackLayout>
                                                 </utils:MultiGestureView>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </FlexLayout>
                                     <StackLayout Grid.Row="2" Orientation="Horizontal" HorizontalOptions="End">
-                                        <iconize:IconButton Text="far-stop-circle" Padding="0"
+                                        <Button Text="&#xf28d;" Padding="0"
                                                             Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.StopGameCommand}"
                                                             CommandParameter="{Binding}"
-                                                            FontFamily="FA-R" FontSize="28" TextColor="Red" BackgroundColor="Transparent"
+                                                            FontFamily="FA-S" FontSize="35" TextColor="Red" BackgroundColor="Transparent"
                                                             WidthRequest="40" VerticalOptions="Start"
                                                             IsVisible="{Binding IsStopped, Converter={StaticResource InvertedBoolConverter}}"/>
-                                        <iconize:IconButton Text="far-play-circle" Padding="0"
+                                        <Button Text="&#xf144;" Padding="0"
                                                             Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.ResumeGameCommand}"
                                                             CommandParameter="{Binding}"
-                                                            FontFamily="FA-R" FontSize="28" TextColor="Red" BackgroundColor="Transparent"
+                                                            FontFamily="FA-S" FontSize="35" TextColor="Red" BackgroundColor="Transparent"
                                                             WidthRequest="40" VerticalOptions="Start"
                                                             IsVisible="{Binding IsStopped}"/>
-                                        <iconize:IconButton Text="far-trash-alt" Padding="0"
+                                        <Button Text="&#xf2ed;" Padding="0" Margin="20,0,0,0"
                                                             Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemoveGameCommand}"
                                                             CommandParameter="{Binding}"
-                                                            FontFamily="FA-R" FontSize="28" TextColor="Red" BackgroundColor="Transparent"
+                                                            FontFamily="FA-S" FontSize="35" TextColor="Red" BackgroundColor="Transparent"
                                                             WidthRequest="40" VerticalOptions="Start" />
                                     </StackLayout>
                                 </Grid>

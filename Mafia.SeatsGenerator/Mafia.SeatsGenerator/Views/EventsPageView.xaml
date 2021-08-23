@@ -3,7 +3,6 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
-             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              x:Class="Mafia.SeatsGenerator.Views.EventsPageView"
              x:Name="ContentPage"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -27,20 +26,16 @@
                                 </Grid.ColumnDefinitions>
                                 <Label Text="{Binding Name}" FontSize="20"
                                        Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
-                                <iconize:IconButton Text="far-play-circle" 
-                                                    Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.LoadEventCommand}"
-                                                    CommandParameter="{Binding}"
-                                                    FontFamily="FA-R" FontSize="19" TextColor="Blue" BackgroundColor="Transparent"
-                                                    HorizontalOptions="Start" VerticalOptions="Center" 
-                                                    Grid.Row="0" Grid.Column="1"/>
-                                <Label Text="{Binding Visitors.Count, StringFormat='&#xf007;:{0}'}" FontFamily="FA-R" TextColor="Blue" FontSize="20"
+                                <Button Grid.Row="0" Grid.Column="1" FontFamily="FA-S" Text='&#xf144;' TextColor="Blue" FontSize="19"
+                                        Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.LoadEventCommand}"
+                                        CommandParameter="{Binding}" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                <Label Text="{Binding Visitors.Count, StringFormat='&#xf0c0;:{0}'}" FontFamily="FA-S" TextColor="Blue" FontSize="16"
                                        Grid.Row="0" Grid.Column="2" VerticalOptions="Center"/>
-                                <iconize:IconButton Text="far-trash-alt" 
-                                                    Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemoveEventCommand}"
-                                                    CommandParameter="{Binding}"
-                                                    FontFamily="FA-R" FontSize="19" TextColor="Red" BackgroundColor="Transparent"
-                                                    HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center" 
-                                                    Grid.Row="0" Grid.Column="3"/>
+                                <Button Text="&#xf2ed;" FontFamily="FA-S" FontSize="19" TextColor="Red" BackgroundColor="Transparent"
+                                        Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.RemoveEventCommand}"
+                                        CommandParameter="{Binding}"
+                                        HorizontalOptions="Start" WidthRequest="40" VerticalOptions="Center"
+                                        Grid.Row="0" Grid.Column="3"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

@@ -3,8 +3,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-[assembly: ExportFont("iconize-fontawesome-regular.ttf", Alias = "FA-R")]
-[assembly: ExportFont("iconize-fontawesome-solid.ttf", Alias = "FA-S")]
+[assembly: ExportFont("fa-regular.otf", Alias = "FA-R")]
+[assembly: ExportFont("fa-solid.otf", Alias = "FA-S")]
 
 namespace Mafia.SeatsGenerator
 {
@@ -15,10 +15,6 @@ namespace Mafia.SeatsGenerator
             InitializeComponent();
             
             XF.Material.Forms.Material.Init(this);
-
-            Plugin.Iconize.Iconize.With(new Plugin.Iconize.Fonts.FontAwesomeBrandsModule())
-                .With(new Plugin.Iconize.Fonts.FontAwesomeRegularModule())
-                .With(new Plugin.Iconize.Fonts.FontAwesomeSolidModule());
 
             MainPage = new MainPage();
         }

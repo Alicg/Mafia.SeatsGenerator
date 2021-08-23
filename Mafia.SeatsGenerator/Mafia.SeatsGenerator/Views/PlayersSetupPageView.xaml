@@ -2,7 +2,6 @@
 
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:iconize="clr-namespace:Plugin.Iconize;assembly=Plugin.Iconize"
              xmlns:viewModels="clr-namespace:Mafia.SeatsGenerator.ViewModels;assembly=Mafia.SeatsGenerator"
              x:Class="Mafia.SeatsGenerator.Views.PlayersSetupPageView"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -45,20 +44,20 @@
                             <Entry Placeholder="Введите ник игрока"
                                    Text="{Binding Name, Mode=TwoWay}" HorizontalOptions="FillAndExpand"
                                    Grid.Column="1"/>
-                            <iconize:IconButton Text="far-plus-square"
-                                                Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.AddPlayerCommand}"
-                                                CommandParameter="{Binding}"
-                                                FontFamily="FA-R" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
-                                                HorizontalOptions="Start" WidthRequest="50" VerticalOptions="Center"
-                                                Grid.Column="2">
-                                <iconize:IconButton.IsVisible>
+                            <Button Text="&#xf0fe;"
+                                    Command="{Binding Source={x:Reference Name=ContentPage}, Path=BindingContext.AddPlayerCommand}"
+                                    CommandParameter="{Binding}"
+                                    FontFamily="FA-S" FontSize="24" TextColor="Green" BackgroundColor="Transparent"
+                                    HorizontalOptions="Start" WidthRequest="50" VerticalOptions="Center"
+                                    Grid.Column="2">
+                                <Button.IsVisible>
                                     <MultiBinding Converter="{StaticResource IsLastCollectionElementConverter}">
                                         <Binding Source="{x:Reference ContentPage}" Path="BindingContext.Players"/>
                                         <Binding/>
                                         <Binding Source="{x:Reference ContentPage}" Path="BindingContext.Players.Count"/>
                                     </MultiBinding>
-                                </iconize:IconButton.IsVisible>
-                            </iconize:IconButton>
+                                </Button.IsVisible>
+                            </Button>
                             <Label Text="{Binding PlayedGames, StringFormat='И: {0}'}" VerticalOptions="Center"
                                    Grid.Row="0" Grid.Column="3" FontSize="20"/>
                             <Label Text="{Binding HostedGames, StringFormat='В: {0}'}" VerticalOptions="Center"
