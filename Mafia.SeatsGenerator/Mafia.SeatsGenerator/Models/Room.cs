@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DynamicData;
 using Xamarin.Forms;
@@ -10,13 +11,16 @@ namespace Mafia.SeatsGenerator.Models
         private readonly ReadOnlyObservableCollection<Game> bindingListOfGames;
         private Game currentGame;
 
-        public Room(int roomNumber)
+        public Room(int roomNumber, IEnumerable<Game> games = null)
         {
             this.RoomNumber = roomNumber;
             
             this.Games = new SourceList<Game>();
             this.Games.Connect().Bind(out this.bindingListOfGames).Subscribe();
+            this.Games.AddRange(games ?? new Game[0]);
         }
+        
+        public int Id { get; set; }
 
         public int RoomNumber { get; }
         

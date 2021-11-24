@@ -12,7 +12,10 @@ namespace Mafia.SeatsGenerator.Models.db
         
         public string Name { get; set; }
         
-        [OneToMany("EventId", CascadeOperations = CascadeOperation.All)]
+        [OneToMany("PlayerEventId", CascadeOperations = CascadeOperation.All)]
         public List<DbPlayerInEvent> Visitors { get; set; }
+        
+        [OneToMany("RoomEventId", CascadeOperations = CascadeOperation.All)]
+        public List<DbRoom> Rooms { get; set; }
     }
 }

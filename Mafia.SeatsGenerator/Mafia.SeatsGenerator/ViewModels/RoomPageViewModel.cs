@@ -36,11 +36,11 @@ namespace Mafia.SeatsGenerator.ViewModels
         public ICommand ChangeHostCommand => new Command<Game>(this.ChangeHost);
         public ICommand ChangePlayerCommand => new Command<PlayerInGame>(this.ChangePlayer);
 
-        public void ClearRoom()
+        public void ClearRoom(bool askConfirmation = true)
         {
             foreach (var game in this.Room.Games.Items.ToArray())
             {
-                this.RemoveGame(game);
+                this.RemoveGameInternal(game, askConfirmation);
             }
         }
 
@@ -97,7 +97,12 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private async void RemoveGame(Game game)
         {
-            var confirmed = await this.popupService.ConfirmationPopup("Удалить игру?", "Удаление игры."); 
+            this.RemoveGameInternal(game);
+        }
+
+        private async void RemoveGameInternal(Game game, bool askConfirmation = true)
+        {
+            var confirmed = askConfirmation ? await this.popupService.ConfirmationPopup("Удалить игру?", "Удаление игры.") : true; 
             if (!confirmed.HasValue || !confirmed.Value) 
             {
                 return;

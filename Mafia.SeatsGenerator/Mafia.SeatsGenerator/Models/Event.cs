@@ -10,5 +10,7 @@ namespace Mafia.SeatsGenerator.Models
         public string Name { get; set; }
         
         public ObservableCollection<Player> Visitors { get; set; }
+        
+        public ObservableCollection<Room> Rooms { get; set; }
     }
 }

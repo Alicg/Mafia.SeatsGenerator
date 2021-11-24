@@ -39,7 +39,8 @@ namespace Mafia.SeatsGenerator.ViewModels
             var newEvent = new Event
             {
                 Name = name,
-                Visitors = new ObservableCollection<Player>(this.playersSetupPageViewModel.Players)
+                Visitors = new ObservableCollection<Player>(this.playersSetupPageViewModel.Players),
+                Rooms = new ObservableCollection<Room>(this.roomsPageViewModel.SortedRoomViewModels.Select(v => v.Room))
             };
             this.eventsService.AddNewEvent(newEvent);
             this.EventsArchive.Add(newEvent);
@@ -55,7 +56,20 @@ namespace Mafia.SeatsGenerator.ViewModels
         {
             this.roomsPageViewModel.Clear();
             this.playersSetupPageViewModel.ClearPlayers();
+            foreach (var room in eventToLoad.Rooms)
+            {
+                foreach (var game in room.BindingListOfGames)
+                {
+                    foreach (var member in game.Members)
+                    {
+                        member.Player.PlayedGames++;
+                    }
+
+                    game.Host.Player.HostedGames++;
+                }
+            }
             this.playersSetupPageViewModel.AddRangePlayers(eventToLoad.Visitors.ToArray());
+            this.roomsPageViewModel.LoadRooms(eventToLoad.Rooms);
         }
     }
 }

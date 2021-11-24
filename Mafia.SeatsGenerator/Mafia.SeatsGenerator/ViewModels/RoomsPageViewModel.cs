@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
@@ -29,7 +30,7 @@ namespace Mafia.SeatsGenerator.ViewModels
             
             this.roomViewModels.Connect()
                 .Sort(SortExpressionComparer<RoomPageViewModel>.Ascending(v => v.Room.RoomNumber))
-                .ObserveOn(SynchronizationContext.Current)
+                //.ObserveOn()
                 .Bind(out this.sortedRoomViewModels)
                 .DisposeMany()
                 .Subscribe();
@@ -60,12 +61,34 @@ namespace Mafia.SeatsGenerator.ViewModels
         public void Clear()
         {
             var newRoomVm = this.AddRoomExecute(1);
-            foreach (var roomViewModel in this.SortedRoomViewModels)
+            foreach (var roomViewModel in this.SortedRoomViewModels.ToList())
             {
                 if (roomViewModel != newRoomVm)
                 {
                     this.RemoveRoomInternal(roomViewModel);
                 }
+            }
+        }
+
+        public void LoadRooms(IList<Room> rooms)
+        {
+            if (rooms.Any())
+            {
+                var newRoomVm = this.AddRoomExecute(11111);
+                foreach (var roomViewModel in this.SortedRoomViewModels.ToList())
+                {
+                    if (roomViewModel != newRoomVm)
+                    {
+                        this.RemoveRoomInternal(roomViewModel);
+                    }
+                }
+
+                foreach (var room in rooms)
+                {
+                    this.AddRoomExecute(room);
+                }
+
+                this.RemoveRoomInternal(newRoomVm);
             }
         }
 
@@ -83,7 +106,12 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private RoomPageViewModel AddRoomExecute(int roomNumber)
         {
-            var newVm = new RoomPageViewModel(new Room(roomNumber), this.playersSetupPageViewModel, this.popupService);
+            return this.AddRoomExecute(new Room(roomNumber));
+        }
+
+        private RoomPageViewModel AddRoomExecute(Room room)
+        {
+            var newVm = new RoomPageViewModel(room, this.playersSetupPageViewModel, this.popupService);
             this.roomViewModels.Add(newVm);
             newVm.Room.Games.Connect().Subscribe(v => this.OnPropertyChanged(nameof(this.LeftBadgeValue)));
 
@@ -107,8 +135,8 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void RemoveRoomInternal(RoomPageViewModel roomViewModel)
         {
-            roomViewModel.ClearRoom();
-            this.roomViewModels.Remove(roomViewModel);
+            roomViewModel.ClearRoom(false);
+            var res = this.roomViewModels.Remove(roomViewModel);
         } 
     }
 }

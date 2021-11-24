@@ -21,10 +21,10 @@ namespace Mafia.SeatsGenerator.Models.db
         /// </summary>
         public int Number { get; set; }
         
-        [ManyToOne("EventId", CascadeOperations = CascadeOperation.All)]
+        [ManyToOne("PlayerEventId", CascadeOperations = CascadeOperation.All)]
         public DbEvent Event { get; set; }
         
         [ForeignKey(typeof(DbEvent))]
-        public int EventId { get; set; }
+        public int PlayerEventId { get; set; }
     }
 }
