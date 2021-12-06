@@ -125,18 +125,37 @@ namespace Mafia.SeatsGenerator.Models
 
         public void SetFirstKilled(PlayerInGame p)
         {
-            if (p.Game.FirstKilled != null)
+            if (this.FirstKilled != null)
             {
-                p.Game.FirstKilled.Player.PlayedGames += 0.5;
+                this.FirstKilled.Player.PlayedGames += 0.5;
             }
 
-            if (p.Game.FirstKilled == p)
+            if (this.FirstKilled == p)
             {
-                p.Game.FirstKilled = null;
+                this.FirstKilled = null;
                 return;
             }
-            p.Game.FirstKilled = p;
-            p.Game.FirstKilled.Player.PlayedGames -= 0.5;
+            this.FirstKilled = p;
+            this.FirstKilled.Player.PlayedGames -= 0.5;
+        }
+
+        public Game Clone(IList<Player> playersToUse)
+        {
+            var clonedGame = new Game
+            {
+                Number = this.Number,
+                IsStopped = this.IsStopped
+            };
+            clonedGame.Host = new PlayerInGame(playersToUse.First(v => v.Name == this.Host.Player.Name), clonedGame);
+            clonedGame.Members.Clear();
+            clonedGame.Members.AddRange(playersToUse.Where(v => this.Members.Any(p => p.Player.Name == v.Name)).Select(v => new PlayerInGame(v, clonedGame)));
+            
+            if (this.FirstKilled != null)
+            {
+                clonedGame.FirstKilled = clonedGame.Members.First(v => v.Player.Name == this.FirstKilled.Player.Name);
+            }
+
+            return clonedGame;
         }
     }
 }

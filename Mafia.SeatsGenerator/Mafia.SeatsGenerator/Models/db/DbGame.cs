@@ -19,6 +19,12 @@ namespace Mafia.SeatsGenerator.Models.db
         [ForeignKey(typeof(DbPlayerInEvent))]
         public int HostId { get; set; }
         
+        [ManyToOne("FirstKilledId", CascadeOperations = CascadeOperation.All)]
+        public DbPlayerInEvent FirstKilled { get; set; }
+        
+        [ForeignKey(typeof(DbPlayerInEvent))]
+        public int? FirstKilledId { get; set; }
+        
         [OneToMany("GameId", CascadeOperations = CascadeOperation.All)]
         public List<DbPlayerInGame> Members { get; set; }
         

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using DynamicData;
 using Xamarin.Forms;
 
@@ -36,6 +37,11 @@ namespace Mafia.SeatsGenerator.Models
                 this.currentGame = value;
                 this.OnPropertyChanged(nameof(this.CurrentGame));
             }
+        }
+
+        public Room Clone(IList<Player> playersToUse)
+        {
+            return new Room(this.RoomNumber, this.BindingListOfGames.Select(v => v.Clone(playersToUse)));
         }
     }
 }

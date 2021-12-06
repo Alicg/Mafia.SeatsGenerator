@@ -22,6 +22,18 @@ namespace Mafia.SeatsGenerator.ViewModels
             var archiveEvents = this.eventsService.SelectAllEvents();
             foreach (var archiveEvent in archiveEvents)
             {
+                foreach (var room in archiveEvent.Rooms)
+                {
+                    foreach (var game in room.BindingListOfGames)
+                    {
+                        foreach (var member in game.Members)
+                        {
+                            member.Player.PlayedGames++;
+                        }
+
+                        game.Host.Player.HostedGames++;
+                    }
+                }
                 this.EventsArchive.Add(archiveEvent);
             }
         }
@@ -54,22 +66,12 @@ namespace Mafia.SeatsGenerator.ViewModels
 
         private void LoadEvent(Event eventToLoad)
         {
+            var clonedEvent = eventToLoad.Clone();
             this.roomsPageViewModel.Clear();
             this.playersSetupPageViewModel.ClearPlayers();
-            foreach (var room in eventToLoad.Rooms)
-            {
-                foreach (var game in room.BindingListOfGames)
-                {
-                    foreach (var member in game.Members)
-                    {
-                        member.Player.PlayedGames++;
-                    }
-
-                    game.Host.Player.HostedGames++;
-                }
-            }
-            this.playersSetupPageViewModel.AddRangePlayers(eventToLoad.Visitors.ToArray());
-            this.roomsPageViewModel.LoadRooms(eventToLoad.Rooms);
+            
+            this.playersSetupPageViewModel.AddRangePlayers(clonedEvent.Visitors.ToArray());
+            this.roomsPageViewModel.LoadRooms(clonedEvent.Rooms);
         }
     }
 }

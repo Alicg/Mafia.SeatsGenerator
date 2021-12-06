@@ -94,5 +94,20 @@ namespace Mafia.SeatsGenerator.Models
         {
             return $"{this.Name}; Игр:{this.PlayedGames}";
         }
+
+        public Player Clone()
+        {
+            return new Player()
+            {
+                Name = this.Name,
+                Number = this.Number,
+                HostedGames = this.HostedGames,
+                PlayedGames = this.PlayedGames,
+                SortingValue = this.SortingValue,
+                IsBusy = this.IsBusy,
+                IsVip = this.IsVip,
+                CanBeHost = this.CanBeHost
+            };
+        }
     }
 }

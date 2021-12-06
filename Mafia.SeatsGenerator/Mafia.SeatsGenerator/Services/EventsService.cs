@@ -40,6 +40,7 @@ namespace Mafia.SeatsGenerator.Services
                     {
                         RoomId = dbEvent.Rooms.First(v => v.RoomNumber == room.RoomNumber).Id, 
                         HostId = dbEvent.Visitors.First(v => v.Name == game.HostName).Id,
+                        FirstKilledId = dbEvent.Visitors.FirstOrDefault(v => v.Name == game.FirstKilled?.Player.Name)?.Id,
                         Number = game.Number
                     };
                     connection.Insert(dbGame);
@@ -80,6 +81,10 @@ namespace Mafia.SeatsGenerator.Services
                     {
                         var newGame = new Game();
                         newGame.Host = new PlayerInGame(newEvent.Visitors.FirstOrDefault(visitor => visitor.Name == dbGame.Host.Name), newGame);
+                        if (dbGame.FirstKilledId != null)
+                        {
+                            newGame.FirstKilled = new PlayerInGame(newEvent.Visitors.FirstOrDefault(visitor => visitor.Name == dbGame.FirstKilled.Name), newGame);
+                        }
                         newGame.Number = dbGame.Number;
                         newGame.Members.AddRange(dbGame.Members.Select(dbMember =>
                         {
